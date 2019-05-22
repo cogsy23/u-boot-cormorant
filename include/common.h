@@ -34,6 +34,8 @@ typedef volatile unsigned long	vu_long;
 typedef volatile unsigned short vu_short;
 typedef volatile unsigned char	vu_char;
 
+# define inline   inline    __attribute__((always_inline)) __attribute__((__gnu_inline__))
+
 #include <config.h>
 #include <linux/bitops.h>
 #include <linux/types.h>
