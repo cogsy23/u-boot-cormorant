@@ -235,7 +235,7 @@ export	HOSTCC HOSTCFLAGS HOSTLDFLAGS PEDCFLAGS HOSTSTRIP CROSS_COMPILE \
 export	TEXT_BASE PLATFORM_CPPFLAGS PLATFORM_RELFLAGS CPPFLAGS CFLAGS AFLAGS
 
 #########################################################################
-
+CFLAGS += -I/usr/include
 # Allow boards to use custom optimize flags on a per dir/file basis
 BCURDIR := $(notdir $(CURDIR))
 $(obj)%.s:	%.S
