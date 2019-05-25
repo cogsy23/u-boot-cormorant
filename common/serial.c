@@ -41,7 +41,8 @@ struct serial_device *__default_serial_console (void)
 #elif defined(CONFIG_405GP) || defined(CONFIG_405CR) || defined(CONFIG_440) \
    || defined(CONFIG_405EP) || defined(CONFIG_405EZ) || defined(CONFIG_405EX) \
    || defined(CONFIG_MPC5xxx) || defined(CONFIG_MPC83xx) \
-   || defined(CONFIG_MPC85xx) || defined(CONFIG_MPC86xx)
+   || defined(CONFIG_MPC85xx) || defined(CONFIG_MPC86xx) \
+   || defined(CONFIG_SYS_SC520)
 #if defined(CONFIG_CONS_INDEX) && defined(CONFIG_SYS_NS16550_SERIAL)
 #if (CONFIG_CONS_INDEX==1)
 	return &eserial1_device;
@@ -79,13 +80,13 @@ struct serial_device *__default_serial_console (void)
 #endif
 #elif defined(CONFIG_S5PC1XX)
 #if defined(CONFIG_SERIAL0)
-	return &s5pc1xx_serial0_device;
+	return &s5p_serial0_device;
 #elif defined(CONFIG_SERIAL1)
-	return &s5pc1xx_serial1_device;
+	return &s5p_serial1_device;
 #elif defined(CONFIG_SERIAL2)
-	return &s5pc1xx_serial2_device;
+	return &s5p_serial2_device;
 #elif defined(CONFIG_SERIAL3)
-	return &s5pc1xx_serial3_device;
+	return &s5p_serial3_device;
 #else
 #error "CONFIG_SERIAL? missing."
 #endif
@@ -162,10 +163,10 @@ void serial_initialize (void)
 	serial_register(&s3c24xx_serial2_device);
 #endif
 #if defined(CONFIG_S5PC1XX)
-	serial_register(&s5pc1xx_serial0_device);
-	serial_register(&s5pc1xx_serial1_device);
-	serial_register(&s5pc1xx_serial2_device);
-	serial_register(&s5pc1xx_serial3_device);
+	serial_register(&s5p_serial0_device);
+	serial_register(&s5p_serial1_device);
+	serial_register(&s5p_serial2_device);
+	serial_register(&s5p_serial3_device);
 #endif
 #if defined(CONFIG_MPC512X)
 #if defined(CONFIG_SYS_PSC1)
