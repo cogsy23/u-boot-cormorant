@@ -841,6 +841,9 @@ mpc5121ads_rev2_config	\
 	fi
 	@$(MKCONFIG) -a mpc5121ads powerpc mpc512x mpc5121ads freescale
 
+pdm360ng_config:	unconfig
+	@$(MKCONFIG) -a pdm360ng powerpc mpc512x pdm360ng
+
 #########################################################################
 ## MPC8xx Systems
 #########################################################################
@@ -1385,6 +1388,9 @@ HH405_config:	unconfig
 
 HUB405_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) powerpc ppc4xx hub405 esd
+
+icon_config:	unconfig
+	@$(MKCONFIG) $(@:_config=) powerpc ppc4xx icon mosaixtech
 
 # Compact-Center(codename intip) & DevCon-Center use different U-Boot images
 intip_config \
@@ -3680,6 +3686,12 @@ PK1C20_config : unconfig
 
 PCI5441_config : unconfig
 	@$(MKCONFIG)  PCI5441 nios2 nios2 pci5441 psyent
+
+# nios2 generic boards
+NIOS2_GENERIC = nios2-generic
+
+$(NIOS2_GENERIC:%=%_config) : unconfig
+	@$(MKCONFIG) $(@:_config=) nios2 nios2 nios2-generic altera
 
 #========================================================================
 ## Microblaze

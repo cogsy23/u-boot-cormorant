@@ -368,6 +368,7 @@ Stefan Roese <sr@denx.de>
 	ebony		PPC440GP
 	glacier		PPC460GT
 	haleakala	PPC405EXr
+	icon		PPC440SPe
 	katmai		PPC440SPe
 	kilauea		PPC405EX
 	lwmon5		PPC440EPx
@@ -466,6 +467,10 @@ Josef Wagner <Wagner@Microsys.de>
 
 	CPC45		MPC8245
 	PM520		MPC5200
+
+Michael Weiss <michael.weiss@ifm.com>
+
+	PDM360NG	MPC5121e
 
 Stephen Williams <steve@icarus.com>
 
@@ -858,6 +863,7 @@ Scott McNutt <smcnutt@psyent.com>
 	EP1C20		Nios-II
 	EP1S10		Nios-II
 	EP1S40		Nios-II
+	nios2-generic	Nios-II
 
 #########################################################################
 # MicroBlaze Systems:							#
