@@ -21,7 +21,7 @@
 #include <common.h>
 #include <command.h>
 #include <string.h>
-#include "envm.h"
+#include <asm/arch-arm_cortexm3/envm.h>
 
 /*
  * Base address and the length of buffer in internal RAM, which

@@ -23,7 +23,7 @@
 #include <common.h>
 #include <spi.h>
 #include <malloc.h>
-#include <clock.h>
+#include <asm/arch-arm_cortexm3/clock.h>
 
 /*
  * Debug output control. While debugging, have SPI_M2S_DEBUG defined.

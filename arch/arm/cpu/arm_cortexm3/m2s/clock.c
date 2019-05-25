@@ -20,7 +20,7 @@
 
 #include <common.h>
 #include <asm/io.h>
-#include "clock.h"
+#include <asm/arch-arm_cortexm3/clock.h>
 
 /*
  * Array of various reference clocks
@@ -78,7 +78,7 @@ static unsigned int clock_mss_divisor(unsigned int r, unsigned int s)
 	v = (r & (0x7<<s)) >> s;
 
 	/*
-	 * Translate the bit representation of the divisor to 
+	 * Translate the bit representation of the divisor to
 	 * a value ready to be used in calculation of a clock.
 	 */
 	switch (v) {

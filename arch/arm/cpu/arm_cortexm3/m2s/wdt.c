@@ -21,7 +21,7 @@
 
 #include <common.h>
 
-#include "wdt.h"
+#include <asm/arch-arm_cortexm3/wdt.h>
 
 /*
  * Strobe the WDT.

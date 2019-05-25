@@ -20,7 +20,7 @@
  */
 
 #include <common.h>
-#include "clock.h"
+#include <asm/arch-arm_cortexm3/clock.h>
 
 /*
  * Print the CPU specific information

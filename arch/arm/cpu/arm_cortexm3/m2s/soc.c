@@ -22,8 +22,8 @@
  */
 
 #include <common.h>
-#include "soc.h"
-#include "wdt.h"
+#include <asm/arch-arm_cortexm3/soc.h>
+#include <asm/arch-arm_cortexm3/wdt.h>
 
 #ifdef CONFIG_M2S_CACHE_ON
 /*

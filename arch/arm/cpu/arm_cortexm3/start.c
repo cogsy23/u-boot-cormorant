@@ -19,7 +19,7 @@
  */
 #include <config.h>
 #include <string.h>
-#include "wdt.h"
+#include <asm/arch-arm_cortexm3/wdt.h>
 
 #ifdef CONFIG_LPC18XX_NORFLASH_BOOTSTRAP_WORKAROUND
 #include <asm/arch/lpc18xx_gpio.h>

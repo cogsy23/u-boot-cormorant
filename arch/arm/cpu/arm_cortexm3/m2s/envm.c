@@ -19,7 +19,7 @@
  */
 
 #include <common.h>
-#include "clock.h"
+#include <asm/arch-arm_cortexm3/clock.h>
 
 /*
  * The current code is good only for ENVM0.

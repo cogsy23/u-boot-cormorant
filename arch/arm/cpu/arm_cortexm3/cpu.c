@@ -21,9 +21,9 @@
 #include <common.h>
 #include <command.h>
 
-#include "envm.h"
-#include "wdt.h"
-#include "clock.h"
+#include <asm/arch-arm_cortexm3/envm.h>
+#include <asm/arch-arm_cortexm3/wdt.h>
+#include <asm/arch-arm_cortexm3/clock.h>
 
 #if defined (CONFIG_SYS_LPC18XX) && defined(CONFIG_SPIFI)
 #include <spifi.h>

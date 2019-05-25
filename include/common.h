@@ -111,7 +111,7 @@ typedef volatile unsigned char	vu_char;
 #include <asm/arch/hardware.h>
 #endif
 #ifdef CONFIG_SYS_ARMCORTEXM3
-#include <asm/arch-cortexm3/hardware.h>
+#include <asm/arch-arm_cortexm3/hardware.h>
 #endif
 #ifdef CONFIG_SYS_A2F
 #include <asm/arch-a2f/a2f.h>
