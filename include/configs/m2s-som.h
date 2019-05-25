@@ -50,7 +50,7 @@
  * known way (as of yet) to read them in run time. Hence,
  * we define them as build-time constants
  */
-#define CONFIG_SYS_M2S_SYSREF		166000000
+#define CONFIG_SYS_M2S_SYSREF		142000000
 
 /*
  * This is a specific revision of the board
@@ -78,7 +78,7 @@
 /*
  * Monitor prompt
  */
-#define CONFIG_SYS_PROMPT		"M2S-SOM> "
+#define CONFIG_SYS_PROMPT		"Cormorant> "
 
 /*
  * We want to call the CPU specific initialization
@@ -221,15 +221,15 @@
 /*
  * Ethernet driver configuration
  */
-#define CONFIG_NET_MULTI
-#define CONFIG_M2S_ETH
+#undef CONFIG_NET_MULTI
+#undef CONFIG_M2S_ETH
 
 #define CONFIG_SYS_RX_ETH_BUFFER	2
 
 /*
  * Use standard MII PHY API
  */
-#define CONFIG_MII
+#undef CONFIG_MII
 #define CONFIG_SYS_FAULT_ECHO_LINK_DOWN
 
 #define CONFIG_SYS_MEMTEST_START	CONFIG_SYS_RAM_BASE
@@ -267,7 +267,7 @@
 #undef CONFIG_CMD_IMLS
 #define CONFIG_CMD_LOADS
 #undef CONFIG_CMD_MISC
-#define CONFIG_CMD_NET
+#undef CONFIG_CMD_NET
 #undef CONFIG_CMD_NFS
 #undef CONFIG_CMD_SOURCE
 #undef CONFIG_CMD_XIMG
@@ -311,22 +311,12 @@
 #define CONFIG_EXTRA_ENV_SETTINGS				\
 	"loadaddr=" MK_STR(UIMAGE_LOADADDR) "\0"		\
 	"args=setenv bootargs " CONFIG_BOOTARGS "\0"		\
-	"ethaddr=C0:B1:3C:83:83:83\0"				\
-	"ipaddr=172.17.4.219\0"					\
-	"serverip=172.17.0.1\0"					\
-	"image=networking.uImage\0"				\
 	"spiaddr=" MK_STR(CONFIG_ENV_IMG_OFFSET) "\0"		\
 	"spisize=400000\0"					\
 	"spiprobe=sf probe " MK_STR(CONFIG_SPI_FLASH_BUS) "\0"	\
-	"addip=setenv bootargs ${bootargs}"			\
-	" ip=${ipaddr}:${serverip}:${gatewayip}:"		\
-	"${netmask}:${hostname}:eth0:off\0"			\
-	"flashboot=run args addip;run spiprobe;"		\
+	"flashboot=run spiprobe;"		\
 	" sf read ${loadaddr} ${spiaddr} ${spisize};"		\
 	" bootm ${loadaddr}\0"					\
-	"netboot=tftp ${loadaddr} ${image};run args addip;bootm\0"	\
-	"update=tftp ${loadaddr} ${image};run spiprobe;"	\
-	" sf erase ${spiaddr} ${filesize};"			\
 	" sf write ${loadaddr} ${spiaddr} ${filesize};"		\
 	" setenv spisize 0x${filesize}; saveenv\0"
 
