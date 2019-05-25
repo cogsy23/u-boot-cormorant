@@ -21,7 +21,7 @@
  */
 
 /*
- * Ported from cpu/ppc4xx/i2c.c by AS HARNOIS by
+ * Ported from arch/powerpc/cpu/ppc4xx/i2c.c by AS HARNOIS by
  * Travis B. Sawyer
  * Sandburst Corporation.
  */
