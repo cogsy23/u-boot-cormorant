@@ -696,6 +696,11 @@ MVBC_P_config: unconfig
 	{   	echo "#define CONFIG_MVBC_P" 	>>$(obj)include/config.h; }
 	@$(MKCONFIG) -n $@ -a MVBC_P ppc mpc5xxx mvbc_p matrix_vision
 
+MVSMR_config: unconfig
+	@mkdir -p $(obj)include
+	@mkdir -p $(obj)board/matrix_vision/mvsmr
+	@$(MKCONFIG) $(@:_config=) ppc mpc5xxx mvsmr matrix_vision
+
 o2dnt_config:	unconfig
 	@$(MKCONFIG) o2dnt ppc mpc5xxx o2dnt
 
@@ -3701,7 +3706,7 @@ BFIN_BOARDS += cm-bf527 cm-bf533 cm-bf537e cm-bf537u cm-bf548 cm-bf561 \
 	tcm-bf518 tcm-bf537
 
 # Misc third party boards
-BFIN_BOARDS += bf537-minotaur bf537-srv1 bf561-acvilon blackstamp
+BFIN_BOARDS += bf537-minotaur bf537-srv1 bf561-acvilon blackstamp ip04
 
 # I-SYST Micromodule
 BFIN_BOARDS += ibf-dsp561

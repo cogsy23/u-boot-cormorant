@@ -422,6 +422,7 @@ Andre Schwarz <andre.schwarz@matrix-vision.de>
 
 	mvbc_p		MPC5200
 	mvblm7		MPC8343
+	mvsmr		MPC5200
 
 Jon Smirl <jonsmirl@gmail.com>
 
@@ -1014,6 +1015,10 @@ Valentin Yakovenkov <yakovenkov@niistt.ru>
 Anton Shurpin <shurpin.aa@niistt.ru>
 
 	BF561-ACVILON	BF561
+
+Brent Kandetzki <brentk@teleco.com>
+
+	IP04		BF532
 
 #########################################################################
 # End of MAINTAINERS list						#
