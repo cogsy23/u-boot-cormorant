@@ -1,5 +1,5 @@
 #
-# (C) Copyright 2000-2009
+# (C) Copyright 2000-2010
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
 #
 # See file CREDITS for list of people who contributed to this
@@ -580,8 +580,7 @@ icecube_5200_LOWBOOT_config		\
 icecube_5200_LOWBOOT08_config		\
 icecube_5200_DDR_config			\
 icecube_5200_DDR_LOWBOOT_config		\
-icecube_5200_DDR_LOWBOOT08_config	\
-icecube_5100_config:			unconfig
+icecube_5200_DDR_LOWBOOT08_config:	unconfig
 	@mkdir -p $(obj)include
 	@mkdir -p $(obj)board/icecube
 	@[ -z "$(findstring LOWBOOT_,$@)" ] || \
@@ -599,14 +598,6 @@ icecube_5100_config:			unconfig
 	@[ -z "$(findstring DDR,$@)" ] || \
 		{ echo "#define CONFIG_MPC5200_DDR"	>>$(obj)include/config.h ; \
 		  $(XECHO) "... DDR memory revision" ; \
-		}
-	@[ -z "$(findstring 5200,$@)" ] || \
-		{ echo "#define CONFIG_MPC5200"		>>$(obj)include/config.h ; \
-		  $(XECHO) "... with MPC5200 processor" ; \
-		}
-	@[ -z "$(findstring 5100,$@)" ] || \
-		{ echo "#define CONFIG_MGT5100"		>>$(obj)include/config.h ; \
-		  $(XECHO) "... with MGT5100 processor" ; \
 		}
 	@$(MKCONFIG) -a IceCube ppc mpc5xxx icecube
 
@@ -626,7 +617,6 @@ lite5200b_LOWBOOT_config:	unconfig
 	@mkdir -p $(obj)board/icecube
 	@ echo "#define CONFIG_MPC5200_DDR"	>>$(obj)include/config.h
 	@ $(XECHO) "... DDR memory revision"
-	@ echo "#define CONFIG_MPC5200"		>>$(obj)include/config.h
 	@ echo "#define CONFIG_LITE5200B"	>>$(obj)include/config.h
 	@[ -z "$(findstring _PM_,$@)" ] || \
 		{ echo "#define CONFIG_LITE5200B_PM"	>>$(obj)include/config.h ; \
@@ -636,7 +626,6 @@ lite5200b_LOWBOOT_config:	unconfig
 		{ echo "TEXT_BASE = 0xFF000000" >$(obj)board/icecube/config.tmp ; \
 		  $(XECHO) "... with LOWBOOT configuration" ; \
 		}
-	@ $(XECHO) "... with MPC5200B processor"
 	@$(MKCONFIG) -a IceCube  ppc mpc5xxx icecube
 
 mcc200_config	\
@@ -760,21 +749,12 @@ TOP5200_config:	unconfig
 	@ echo "#define CONFIG_$(@:_config=) 1"	>$(obj)include/config.h
 	@$(MKCONFIG) -n $@ -a TOP5200 ppc mpc5xxx top5200 emk
 
-Total5100_config		\
 Total5200_config		\
 Total5200_lowboot_config	\
 Total5200_Rev2_config		\
 Total5200_Rev2_lowboot_config:	unconfig
 	@mkdir -p $(obj)include
 	@mkdir -p $(obj)board/total5200
-	@[ -z "$(findstring 5100,$@)" ] || \
-		{ echo "#define CONFIG_MGT5100"		>>$(obj)include/config.h ; \
-		  $(XECHO) "... with MGT5100 processor" ; \
-		}
-	@[ -z "$(findstring 5200,$@)" ] || \
-		{ echo "#define CONFIG_MPC5200"		>>$(obj)include/config.h ; \
-		  $(XECHO) "... with MPC5200 processor" ; \
-		}
 	@[ -n "$(findstring Rev,$@)" ] || \
 		{ echo "#define CONFIG_TOTAL5200_REV 1"	>>$(obj)include/config.h ; \
 		  $(XECHO) "... revision 1 board" ; \
@@ -2025,6 +2005,10 @@ ZPC1900_config: unconfig
 ## Coldfire
 #########################################################################
 
+astro_mcf5373l_config \
+astro_mcf5373l_RAM_config :	unconfig
+	@$(MKCONFIG) -t $(@:_config=) astro_mcf5373l m68k mcf532x mcf5373l astro
+
 M5208EVBE_config :		unconfig
 	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 m5208evbe freescale
 
@@ -2092,6 +2076,9 @@ EB+MCF-EV123_internal_config :	unconfig
 	@mkdir -p $(obj)board/BuS/EB+MCF-EV123
 	@echo "TEXT_BASE = 0xF0000000"|tee $(obj)board/BuS/EB+MCF-EV123/textbase.mk
 	@$(MKCONFIG) EB+MCF-EV123 m68k mcf52x2 EB+MCF-EV123 BuS
+
+EP2500_config:			unconfig
+	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 ep2500 Mercury
 
 idmr_config :			unconfig
 	@$(MKCONFIG) $(@:_config=) m68k mcf52x2 idmr
