@@ -92,8 +92,7 @@ int board_init(void)
 
 int checkboard(void)
 {
-	printf("Board: M2S-SOM Rev %s, www.emcraft.com\n",
-		CONFIG_SYS_BOARD_REV_STR);
+	printf("Board: Cormorant Rev 5, www.cgsy.com.au\n");
 	return 0;
 }
 
