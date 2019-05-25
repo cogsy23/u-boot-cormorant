@@ -306,6 +306,11 @@ $(obj)u-boot.srec:	$(obj)u-boot
 $(obj)u-boot.bin:	$(obj)u-boot
 		$(OBJCOPY) ${OBJCFLAGS} -O binary $< $@
 
+$(obj)u-boot.upgrade:	$(obj)u-boot.bin
+		split -b 32768 -a 1 -d u-boot.bin u-boot.bin-
+		scp u-boot.bin-* yota:~/
+		scp u-boot.bin yota:~/
+
 $(obj)u-boot.ldr:	$(obj)u-boot
 		$(CREATE_LDR_ENV)
 		$(LDR) -T $(CONFIG_BFIN_CPU) -c $@ $< $(LDR_FLAGS)
@@ -3183,6 +3188,9 @@ omap3_zoom2_config :	unconfig
 
 smdkc100_config:	unconfig
 	@$(MKCONFIG) $(@:_config=) arm arm_cortexa8 smdkc100 samsung s5pc1xx
+
+actel_f2_config :  unconfig
+	@$(MKCONFIG) $(@:_config=) arm arm_cortexm3 actel_f2 actel NULL
 
 #########################################################################
 ## XScale Systems

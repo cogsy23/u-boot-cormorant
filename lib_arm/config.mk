@@ -33,12 +33,19 @@ STANDALONE_LOAD_ADDR = 0xc100000
 endif
 endif
 
+
 PLATFORM_CPPFLAGS += -DCONFIG_ARM -D__ARM__
 
-# Explicitly specifiy 32-bit ARM ISA since toolchain default can be -mthumb:
-PLATFORM_CPPFLAGS += $(call cc-option,-marm,)
+# Explicitly specify 32-bit ARM ISA since toolchain default can be -mthumb:
+
+# Add these flags only when the CPU is not Cortex-M3,
+# which is a Thumb-2 only core.
+#ifeq (,$(findstring -mcpu=cortex-m3,$(PLATFORM_CPPFLAGS)))
+#PLATFORM_CPPFLAGS += $(call cc-option,-marm,)
+#endif
 
 # Try if EABI is supported, else fall back to old API,
+# 
 # i. e. for example:
 # - with ELDK 4.2 (EABI supported), use:
 #	-mabi=aapcs-linux -mno-thumb-interwork
@@ -46,15 +53,20 @@ PLATFORM_CPPFLAGS += $(call cc-option,-marm,)
 #	-mabi=apcs-gnu -mno-thumb-interwork
 # - with ELDK 3.1 (gcc 3.x), use:
 #	-mapcs-32 -mno-thumb-interwork
-PLATFORM_CPPFLAGS += $(call cc-option,\
-				-mabi=aapcs-linux -mno-thumb-interwork,\
-				$(call cc-option,\
-					-mapcs-32,\
-					$(call cc-option,\
-						-mabi=apcs-gnu,\
-					)\
-				) $(call cc-option,-mno-thumb-interwork,)\
-			)
+
+# Add these flags only when the CPU is not Cortex-M3,
+# which is a Thumb-2 only core.
+#ifeq (,$(findstring -mcpu=cortex-m3,$(PLATFORM_CPPFLAGS)))
+#PLATFORM_CPPFLAGS += $(call cc-option,\
+#				-mabi=aapcs-linux -mno-thumb-interwork,\
+#				$(call cc-option,\
+#					-mapcs-32,\
+#					$(call cc-option,\
+#						-mabi=apcs-gnu,\
+#					)\
+#				) $(call cc-option,-mno-thumb-interwork,)\
+#			)
+#endif
 
 # For EABI, make sure to provide raise()
 ifneq (,$(findstring -mabi=aapcs-linux,$(PLATFORM_CPPFLAGS)))

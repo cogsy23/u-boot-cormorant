@@ -125,7 +125,9 @@ void blue_LED_off(void) __attribute__((weak, alias("__blue_LED_off")));
 static int init_baudrate (void)
 {
 	char tmp[64];	/* long enough for environment variables */
+
 	int i = getenv_r ("baudrate", tmp, sizeof (tmp));
+
 	gd->bd->bi_baudrate = gd->baudrate = (i > 0)
 			? (int) simple_strtoul (tmp, NULL, 10)
 			: CONFIG_BAUDRATE;
@@ -278,6 +280,7 @@ void start_armboot (void)
 
 	/* Pointer is writable since we allocated a register for it */
 	gd = (gd_t*)(_armboot_start - CONFIG_SYS_MALLOC_LEN - sizeof(gd_t));
+
 	/* compiler optimization barrier needed for GCC >= 3.4 */
 	__asm__ __volatile__("": : :"memory");
 
