@@ -254,9 +254,7 @@ static int bootm_linux_fdt(int machid, bootm_headers_t *images)
     defined (CONFIG_CMDLINE_TAG) || \
     defined (CONFIG_INITRD_TAG) || \
     defined (CONFIG_SERIAL_TAG) || \
-    defined (CONFIG_REVISION_TAG) || \
-    defined (CONFIG_LCD) || \
-    defined (CONFIG_VFD)
+    defined (CONFIG_REVISION_TAG)
 static void setup_start_tag (bd_t *bd)
 {
 	params = (struct tag *) bd->bi_boot_params;
@@ -347,7 +345,6 @@ static void setup_initrd_tag (bd_t *bd, ulong initrd_start, ulong initrd_end)
 	params = tag_next (params);
 }
 #endif /* CONFIG_INITRD_TAG */
-
 
 #if defined (CONFIG_SETUP_VIDEOLFB_TAG) && (defined (CONFIG_VFD) || defined (CONFIG_LCD))
 extern ulong calc_fbsize (void);
