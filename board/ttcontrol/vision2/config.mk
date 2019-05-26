@@ -1,6 +1,5 @@
 #
-# (C) Copyright 2001
-# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+# Copyright 2009 Freescale Semiconductor, Inc. All Rights Reserved.
 #
 # See file CREDITS for list of people who contributed to this
 # project.
@@ -21,8 +20,6 @@
 # MA 02111-1307 USA
 #
 
-#
-# TQM8xxL boards
-#
-
-TEXT_BASE = 0x40000000
+LDSCRIPT = $(CPUDIR)/$(SOC)/u-boot.lds
+TEXT_BASE = 0x97800000
+IMX_CONFIG = $(SRCTREE)/board/$(BOARDDIR)/imximage_hynix.cfg

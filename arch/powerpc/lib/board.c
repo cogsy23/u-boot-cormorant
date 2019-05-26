@@ -107,7 +107,7 @@ void doc_init (void);
 
 static char *failed = "*** failed ***\n";
 
-#if defined(CONFIG_OXC) || defined(CONFIG_PCU_E) || defined(CONFIG_RMU)
+#if defined(CONFIG_OXC) || defined(CONFIG_RMU)
 extern flash_info_t flash_info[];
 #endif
 
@@ -681,11 +681,10 @@ void board_init_r (gd_t *id, ulong dest_addr)
 	unlock_ram_in_cache();	/* it's time to unlock D-cache in e500 */
 #endif
 
-#if defined(CONFIG_BAB7xx) || defined(CONFIG_CPC45)
+#if defined(CONFIG_PCI) && defined(CONFIG_SYS_EARLY_PCI_INIT)
 	/*
-	 * Do PCI configuration on BAB7xx and CPC45 _before_ the flash
-	 * gets initialised, because we need the ISA resp. PCI_to_LOCAL bus
-	 * bridge there.
+	 * Do early PCI configuration _before_ the flash gets initialised,
+	 * because PCU ressources are crucial for flash access on some boards.
 	 */
 	pci_init ();
 #endif
@@ -735,7 +734,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 #endif
 
 
-# if defined(CONFIG_PCU_E) || defined(CONFIG_OXC) || defined(CONFIG_RMU)
+# if defined(CONFIG_OXC) || defined(CONFIG_RMU)
 	/* flash mapped at end of memory map */
 	bd->bi_flashoffset = TEXT_BASE + flash_size;
 # elif CONFIG_SYS_MONITOR_BASE == CONFIG_SYS_FLASH_BASE
@@ -856,7 +855,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 
 	WATCHDOG_RESET ();
 
-#if defined(CONFIG_PCI) && !defined(CONFIG_BAB7xx) && !defined(CONFIG_CPC45)
+#if defined(CONFIG_PCI) && !defined(CONFIG_SYS_EARLY_PCI_INIT)
 	/*
 	 * Do pci configuration
 	 */

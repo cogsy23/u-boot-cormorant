@@ -117,7 +117,6 @@ Wolfgang Denk <wd@denx.de>
 	c2mon		MPC855
 	hermes		MPC860
 	lwmon		MPC823
-	pcu_e		MPC855
 
 	CU824		MPC8240
 	Sandpoint8240	MPC8240
@@ -207,8 +206,6 @@ Frank Gottschling <fgottschling@eltec.de>
 Wolfgang Grandegger <wg@denx.de>
 
 	ipek01		MPC5200
-
-	CCM		MPC855
 
 	PN62		MPC8240
 	IPHASE4539	MPC8260
@@ -551,6 +548,7 @@ Stefano Babic <sbabic@denx.de>
 	polaris		xscale
 	trizepsiv	xscale
 	mx51evk		i.MX51
+ 	vision2		i.MX51
 
 Dirk Behme <dirk.behme@gmail.com>
 

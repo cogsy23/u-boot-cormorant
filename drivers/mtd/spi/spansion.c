@@ -56,6 +56,7 @@
 #define SPSN_EXT_ID_S25FL128P_64KB	0x0301
 #define SPSN_EXT_ID_S25FL128S_64KB	0x4D01
 #define SPSN_EXT_ID_S25FL064P	0x4D00
+#define SPSN_EXT_ID_S25FL032P	0x4D00
 
 #define SPANSION_SR_WIP		(1 << 0)	/* Write-in-Progress */
 
@@ -160,6 +161,14 @@ static struct spansion_spi_flash_params spansion_spi_flash_table[] = {
 		.pages_per_sector[1] = 256,
 		.nr_sectors[1] = 254,
 		.name = "S25FL128S_64K",
+	},
+	{
+		.idcode1 = SPSN_ID_S25FL032A,
+		.idcode2 = SPSN_EXT_ID_S25FL032P,
+		.page_size = 256,
+		.pages_per_sector = 256,
+		.nr_sectors = 64,
+		.name = "S25FL032P",
 	},
 };
 
@@ -328,6 +337,10 @@ int spansion_erase(struct spi_flash *flash, u32 offset, size_t len)
 			offset, offset + len, start, end);
 	}
 
+	cmd[0] = CMD_S25FLXX_SE;
+	cmd[2] = 0x00;
+	cmd[3] = 0x00;
+
 	ret = spi_claim_bus(flash->spi);
 	if (ret) {
 		debug("SF: Unable to claim SPI bus\n");
@@ -335,15 +348,8 @@ int spansion_erase(struct spi_flash *flash, u32 offset, size_t len)
 	}
 
 	ret = 0;
-	pos = start;
-	do {
-		sector_size = spansion_sec_size(spsn, pos);
-
-		cmd[0] = (sector_size == 4096) ? spsn->params->cmd_pe :
-						 CMD_S25FLXX_SE;
-		cmd[1] = pos >> 16;
-		cmd[2] = pos >>  8;
-		cmd[3] = pos >>  0;
+	for (actual = 0; actual < len; actual += sector_size) {
+		cmd[1] = (offset + actual) >> 16;
 
 		ret = spi_flash_cmd(flash->spi, CMD_S25FLXX_WREN, NULL, 0);
 		if (ret < 0) {
@@ -363,14 +369,10 @@ int spansion_erase(struct spi_flash *flash, u32 offset, size_t len)
 			debug("SF: SPANSION page erase timed out\n");
 			break;
 		}
-
-		pos += sector_size;
-	} while (pos < end);
-
-	if (ret == 0) {
-		debug("SF: SPANSION: Successfully erased %lu bytes @ 0x%lx\n",
-		      pos, start);
 	}
+
+	debug("SF: SPANSION: Successfully erased %u bytes @ 0x%x\n",
+	      len, offset);
 
 	spi_release_bus(flash->spi);
 	return ret;
