@@ -341,7 +341,7 @@ board_init_f (ulong bootflag)
 	bd->bi_memsize   = gd->ram_size;	/* size  of  DRAM memory in bytes */
 #ifdef CONFIG_SYS_INIT_RAM_ADDR
 	bd->bi_sramstart = CONFIG_SYS_INIT_RAM_ADDR;	/* start of  SRAM memory	*/
-	bd->bi_sramsize  = CONFIG_SYS_INIT_RAM_END;	/* size  of  SRAM memory	*/
+	bd->bi_sramsize  = CONFIG_SYS_INIT_RAM_SIZE;	/* size  of  SRAM memory	*/
 #endif
 	bd->bi_mbar_base = CONFIG_SYS_MBAR;		/* base of internal registers */
 
@@ -393,7 +393,6 @@ board_init_f (ulong bootflag)
  */
 void board_init_r (gd_t *id, ulong dest_addr)
 {
-	cmd_tbl_t *cmdtp;
 	char *s;
 	bd_t *bd;
 	extern void malloc_bin_reloc (void);

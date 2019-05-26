@@ -27,10 +27,9 @@
  * MA 02111-1307 USA
  */
 
-
+#include <asm-offsets.h>
 #include <config.h>
 #include <version.h>
-
 
 /*
  * Jump vector table
@@ -65,7 +64,7 @@ _start:	b       reset
 
 .globl _TEXT_BASE
 _TEXT_BASE:
-	.word	TEXT_BASE
+	.word	CONFIG_SYS_TEXT_BASE
 
 #if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 .globl _armboot_start
@@ -212,7 +211,7 @@ fixloop:
 	str	r4, [r2]
 	add	r2, r2, #4
 	cmp	r2, r3
-	bne	fixloop
+	blo	fixloop
 #endif
 /*
 	now copy to sram the interrupt vector
@@ -331,7 +330,7 @@ vector_copy_loop:
 stack_setup:
 	ldr	r0, _TEXT_BASE		/* upper 128 KiB: relocated uboot   */
 	sub	r0, r0, #CONFIG_SYS_MALLOC_LEN	/* malloc area                      */
-	sub	r0, r0, #CONFIG_SYS_GBL_DATA_SIZE /* bdinfo                        */
+	sub	r0, r0, #GENERATED_GBL_DATA_SIZE /* bdinfo                        */
 #ifdef CONFIG_USE_IRQ
 	sub	r0, r0, #(CONFIG_STACKSIZE_IRQ+CONFIG_STACKSIZE_FIQ)
 #endif

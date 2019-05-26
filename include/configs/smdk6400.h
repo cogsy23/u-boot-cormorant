@@ -51,7 +51,7 @@
 /* input clock of PLL: SMDK6400 has 12MHz input clock */
 #define CONFIG_SYS_CLK_FREQ	12000000
 
-#if !defined(CONFIG_NAND_SPL) && (TEXT_BASE >= 0xc0000000)
+#if !defined(CONFIG_NAND_SPL) && (CONFIG_SYS_TEXT_BASE >= 0xc0000000)
 #define CONFIG_ENABLE_MMU
 #endif
 
@@ -71,7 +71,6 @@
  * Size of malloc() pool
  */
 #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + 1024 * 1024)
-#define CONFIG_SYS_GBL_DATA_SIZE	128	/* size in bytes for initial data */
 
 /*
  * Hardware drivers

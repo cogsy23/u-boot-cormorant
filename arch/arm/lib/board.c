@@ -147,7 +147,7 @@ static int display_banner (void)
 #else
 	       _armboot_start,
 #endif
-	       _bss_start, _bss_end);
+	       _bss_start_ofs+_TEXT_BASE, _bss_end_ofs+_TEXT_BASE);
 #ifdef CONFIG_MODEM_SUPPORT
 	debug ("Modem Support enabled\n");
 #endif
@@ -426,15 +426,6 @@ void start_armboot (void)
 	enable_interrupts ();
 
 	/* Perform network card initialisation if necessary */
-#ifdef CONFIG_DRIVER_TI_EMAC
-	/* XXX: this needs to be moved to board init */
-extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
-	if (getenv ("ethaddr")) {
-		uchar enetaddr[6];
-		eth_getenv_enetaddr("ethaddr", enetaddr);
-		davinci_eth_set_mac_addr(enetaddr);
-	}
-#endif
 
 #if defined(CONFIG_DRIVER_SMC91111) || defined (CONFIG_DRIVER_LAN91C96)
 	/* XXX: this needs to be moved to board init */
@@ -534,7 +525,7 @@ void board_init_f (ulong bootflag)
 
 	memset ((void*)gd, 0, sizeof (gd_t));
 
-	gd->mon_len = _bss_end - _TEXT_BASE;
+	gd->mon_len = _bss_end_ofs;
 
 	for (init_fnc_ptr = init_sequence; *init_fnc_ptr; ++init_fnc_ptr) {
 		if ((*init_fnc_ptr)() != 0) {
@@ -696,6 +687,7 @@ static char *failed = "*** failed ***\n";
  *
  ************************************************************************
  */
+
 void board_init_r (gd_t *id, ulong dest_addr)
 {
 	char *s;
@@ -719,7 +711,7 @@ void board_init_r (gd_t *id, ulong dest_addr)
 
 	gd->flags |= GD_FLG_RELOC;	/* tell others: relocation done */
 
-	monitor_flash_len = _bss_start - _TEXT_BASE;
+	monitor_flash_len = _bss_start_ofs;
 	debug ("monitor flash len: %08lX\n", monitor_flash_len);
 	board_init();	/* Setup chipselects */
 
@@ -740,6 +732,9 @@ void board_init_r (gd_t *id, ulong dest_addr)
 #endif
 #if defined(CONFIG_CMD_I2C)
 	i2c_reloc();
+#endif
+#if defined(CONFIG_CMD_ONENAND)
+	onenand_reloc();
 #endif
 #endif /* !defined(CONFIG_RELOC_FIXUP_WORKS) */
 
@@ -796,6 +791,11 @@ void board_init_r (gd_t *id, ulong dest_addr)
 	onenand_init();
 #endif
 
+#ifdef CONFIG_GENERIC_MMC
+       puts("MMC:   ");
+       mmc_initialize(bd);
+#endif
+
 #ifdef CONFIG_HAS_DATAFLASH
 	AT91F_DataflashInit();
 	dataflash_print_info();
@@ -838,16 +838,6 @@ void board_init_r (gd_t *id, ulong dest_addr)
 	enable_interrupts ();
 
 	/* Perform network card initialisation if necessary */
-#ifdef CONFIG_DRIVER_TI_EMAC
-	/* XXX: this needs to be moved to board init */
-extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
-	if (getenv ("ethaddr")) {
-		uchar enetaddr[6];
-		eth_getenv_enetaddr("ethaddr", enetaddr);
-		davinci_eth_set_mac_addr(enetaddr);
-	}
-#endif
-
 #if defined(CONFIG_DRIVER_SMC91111) || defined (CONFIG_DRIVER_LAN91C96)
 	/* XXX: this needs to be moved to board init */
 	if (getenv ("ethaddr")) {
@@ -869,11 +859,6 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 
 #ifdef BOARD_LATE_INIT
 	board_late_init ();
-#endif
-
-#ifdef CONFIG_GENERIC_MMC
-	puts ("MMC:   ");
-	mmc_initialize (gd->bd);
 #endif
 
 #ifdef CONFIG_BITBANGMII
@@ -931,6 +916,7 @@ extern void davinci_eth_set_mac_addr (const u_int8_t *addr);
 
 	/* NOTREACHED - no way out of command loop except booting */
 }
+
 #endif /* defined(CONFIG_SYS_ARM_WITHOUT_RELOC) */
 
 void hang (void)

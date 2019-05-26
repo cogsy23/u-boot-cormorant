@@ -23,7 +23,7 @@
  * MA 02111-1307 USA
  */
 
-
+#include <asm-offsets.h>
 #include <config.h>
 #include <version.h>
 #include <asm/hardware.h>
@@ -77,7 +77,7 @@ _fiq:			.word fiq
 
 .globl _TEXT_BASE
 _TEXT_BASE:
-	.word	TEXT_BASE
+	.word	CONFIG_SYS_TEXT_BASE
 
 #if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 .globl _armboot_start
@@ -222,7 +222,7 @@ fixloop:
 	str	r4, [r2]
 	add	r2, r2, #4
 	cmp	r2, r3
-	bne	fixloop
+	blo	fixloop
 #endif
 #endif	/* #ifndef CONFIG_SKIP_RELOCATE_UBOOT */
 
@@ -298,11 +298,11 @@ relocate:				/* relocate U-Boot to RAM	    */
 	cmp	r0, r1			/* don't reloc during debug	    */
 	beq	stack_setup
 
-#if TEXT_BASE
+#if CONFIG_SYS_TEXT_BASE
 #ifndef CONFIG_LPC2292 /* already done in lowlevel_init */
 	ldr	r2, =0x0		/* Relocate the exception vectors   */
 	cmp	r1, r2			/* and associated data to address   */
-	ldmneia r0!, {r3-r10}		/* 0x0. Do nothing if TEXT_BASE is  */
+	ldmneia r0!, {r3-r10}		/* 0x0. Do nothing if CONFIG_SYS_TEXT_BASE is  */
 	stmneia r2!, {r3-r10}		/* 0x0. Copy the first 15 words.    */
 	ldmneia r0, {r3-r9}
 	stmneia r2, {r3-r9}
@@ -327,7 +327,7 @@ copy_loop:
 stack_setup:
 	ldr	r0, _TEXT_BASE		/* upper 128 KiB: relocated uboot   */
 	sub	r0, r0, #CONFIG_SYS_MALLOC_LEN /* malloc area			    */
-	sub	r0, r0, #CONFIG_SYS_GBL_DATA_SIZE /* bdinfo			    */
+	sub	r0, r0, #GENERATED_GBL_DATA_SIZE /* bdinfo			    */
 #ifdef CONFIG_USE_IRQ
 	sub	r0, r0, #(CONFIG_STACKSIZE_IRQ+CONFIG_STACKSIZE_FIQ)
 #endif
@@ -609,7 +609,7 @@ lock_loop:
 #if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 	ldr	r2, _armboot_start
 	sub	r2, r2, #(CONFIG_STACKSIZE+CONFIG_SYS_MALLOC_LEN)
-	sub	r2, r2, #(CONFIG_SYS_GBL_DATA_SIZE+8)	@ set base 2 words into abort stack
+	sub	r2, r2, #(GENERATED_GBL_DATA_SIZE+8)	@ set base 2 words into abort stack
 #else
 	ldr	r2, IRQ_STACK_START_IN
 #endif
@@ -646,7 +646,7 @@ lock_loop:
 #if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 	ldr	r13, _armboot_start		@ setup our mode stack
 	sub	r13, r13, #(CONFIG_STACKSIZE+CONFIG_SYS_MALLOC_LEN)
-	sub	r13, r13, #(CONFIG_SYS_GBL_DATA_SIZE+8) @ reserved a couple spots in abort stack
+	sub	r13, r13, #(GENERATED_GBL_DATA_SIZE+8) @ reserved a couple spots in abort stack
 #else
 	ldr	r13, IRQ_STACK_START_IN		@ setup our mode stack
 #endif
@@ -755,7 +755,7 @@ reset_cpu:
 	ldr	r0, [r1, #+NETARM_MEM_CS0_BASE_ADDR]
 	ldr	r1, =0xFFFFF000
 	and	r0, r1, r0
-	ldr	r1, =(relocate-TEXT_BASE)
+	ldr	r1, =(relocate-CONFIG_SYS_TEXT_BASE)
 	add	r0, r1, r0
 	ldr	r4, =NETARM_GEN_MODULE_BASE
 	ldr	r1, =NETARM_GEN_SW_SVC_RESETA

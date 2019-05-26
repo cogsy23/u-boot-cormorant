@@ -30,7 +30,7 @@
  * global variables during system initialization (until we have set
  * up the memory controller so that we can use RAM).
  *
- * Keep it *SMALL* and remember to set CONFIG_SYS_GBL_DATA_SIZE > sizeof(gd_t)
+ * Keep it *SMALL* and remember to set GENERATED_GBL_DATA_SIZE > sizeof(gd_t)
  */
 
 typedef	struct	global_data {
@@ -46,6 +46,20 @@ typedef	struct	global_data {
 #endif
 #ifdef CONFIG_FSL_ESDHC
 	unsigned long	sdhc_clk;
+#endif
+#ifdef CONFIG_AT91FAMILY
+	/* "static data" needed by at91's clock.c */
+	unsigned long	cpu_clk_rate_hz;
+	unsigned long	main_clk_rate_hz;
+	unsigned long	mck_rate_hz;
+	unsigned long	plla_rate_hz;
+	unsigned long	pllb_rate_hz;
+	unsigned long	at91_pllb_usb_init;
+	/* "static data" needed by at91's timer.c */
+	unsigned long	timer_rate_hz;
+	unsigned long	tbl;
+	unsigned long	tbu;
+	unsigned long long	timer_reset_value;
 #endif
 #if !defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 	unsigned long	relocaddr;	/* Start address of U-Boot in RAM */

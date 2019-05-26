@@ -43,6 +43,7 @@
  */
 #undef CONFIG_SKIP_LOWLEVEL_INIT			/* define for developing */
 #undef CONFIG_SKIP_RELOCATE_UBOOT			/* define for developing */
+#define	CONFIG_SYS_TEXT_BASE	0x0
 
 /*
  * define the following to enable debug blinks.  A debug blink function
@@ -75,7 +76,6 @@
  * Size of malloc() pool
  */
 #define CONFIG_SYS_MALLOC_LEN	    (CONFIG_ENV_SIZE + 128*1024)
-#define CONFIG_SYS_GBL_DATA_SIZE	128	/* size in bytes reserved for initial data */
 
 /*
  * PXA250 IDP memory map information
@@ -271,7 +271,7 @@
 /*
  * Physical Memory Map
  */
-#define CONFIG_NR_DRAM_BANKS	4	   /* we have 1 banks of DRAM */
+#define CONFIG_NR_DRAM_BANKS	1	   /* we have 1 bank of DRAM */
 #define PHYS_SDRAM_1		0xa0000000 /* SDRAM Bank #1 */
 #define PHYS_SDRAM_1_SIZE	0x04000000 /* 64 MB */
 #define PHYS_SDRAM_2		0xa4000000 /* SDRAM Bank #2 */
@@ -291,6 +291,9 @@
 #define CONFIG_SYS_DRAM_SIZE		0x04000000
 
 #define CONFIG_SYS_FLASH_BASE		PHYS_FLASH_1
+
+#define CONFIG_SYS_SDRAM_BASE		PHYS_SDRAM_1
+#define	CONFIG_SYS_INIT_SP_ADDR		(GENERATED_GBL_DATA_SIZE + PHYS_SDRAM_1)
 
 /*
  * GPIO settings
@@ -314,6 +317,9 @@
 
 #define CONFIG_SYS_PSSR_VAL		0x20
 
+#define	CONFIG_SYS_CCCR			CCCR_L27|CCCR_M2|CCCR_N10
+#define	CONFIG_SYS_CKEN			0x0
+
 /*
  * Memory settings
  */
@@ -323,6 +329,8 @@
 #define CONFIG_SYS_MDCNFG_VAL		0x090009C9
 #define CONFIG_SYS_MDREFR_VAL		0x0085C017
 #define CONFIG_SYS_MDMRS_VAL		0x00220022
+#define	CONFIG_SYS_FLYCNFG_VAL		0x00000000
+#define	CONFIG_SYS_SXCNFG_VAL		0x00000000
 
 /*
  * PCMCIA and CF Interfaces

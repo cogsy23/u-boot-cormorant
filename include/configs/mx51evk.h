@@ -30,8 +30,8 @@
 #define CONFIG_MX51	/* in a mx51 */
 #define CONFIG_SKIP_RELOCATE_UBOOT
 
-#define CONFIG_MX51_HCLK_FREQ		24000000	/* RedBoot says 26MHz */
-#define CONFIG_MX51_CLK32		32768
+#define CONFIG_SYS_MX5_HCLK	24000000
+#define CONFIG_SYS_MX5_CLK32		32768
 #define CONFIG_DISPLAY_CPUINFO
 #define CONFIG_DISPLAY_BOARDINFO
 
@@ -52,7 +52,6 @@
  */
 #define CONFIG_SYS_MALLOC_LEN		(CONFIG_ENV_SIZE + 2 * 1024 * 1024)
 /* size in bytes reserved for initial data */
-#define CONFIG_SYS_GBL_DATA_SIZE	128
 
 #define BOARD_LATE_INIT
 
