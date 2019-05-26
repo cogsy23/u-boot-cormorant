@@ -172,7 +172,7 @@ static void set_pcmcia_timing (int pmode);
 
 /* ------------------------------------------------------------------------- */
 
-int do_ide (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+int do_ide (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
     int rcode = 0;
 
@@ -346,7 +346,7 @@ int do_ide (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
     }
 }
 
-int do_diskboot (cmd_tbl_t *cmdtp, int flag, int argc, char *argv[])
+int do_diskboot (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
 	char *boot_device = NULL;
 	char *ep;
@@ -555,7 +555,6 @@ void ide_init (void)
 	int i, bus;
 #if defined(CONFIG_SC3)
 	unsigned int ata_reset_time = ATA_RESET_TIME;
-	char *s;
 #endif
 #ifdef CONFIG_IDE_8xx_PCCARD
 	extern int pcmcia_on (void);

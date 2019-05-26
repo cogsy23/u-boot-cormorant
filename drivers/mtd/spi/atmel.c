@@ -658,7 +658,7 @@ out:
 struct spi_flash *spi_flash_probe_atmel(struct spi_slave *spi, u8 *idcode)
 {
 	const struct atmel_spi_flash_params *params;
-	unsigned long page_size;
+	unsigned page_size;
 	unsigned int family;
 	struct atmel_spi_flash *asf;
 	unsigned int i;
@@ -747,8 +747,9 @@ struct spi_flash *spi_flash_probe_atmel(struct spi_slave *spi, u8 *idcode)
 				* params->blocks_per_sector
 				* params->nr_sectors;
 
-	debug("SF: Detected %s with page size %lu, total %u bytes\n",
-			params->name, page_size, asf->flash.size);
+	printf("SF: Detected %s with page size %u, total ",
+	       params->name, page_size);
+	print_size(asf->flash.size, "\n");
 
 	return &asf->flash;
 

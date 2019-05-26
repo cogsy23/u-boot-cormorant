@@ -55,6 +55,7 @@ int checkcpu(void)
 		char name[15];
 		u32 partid;
 	} cpu_type_list [] = {
+		CPU_TYPE_ENTRY(8308),
 		CPU_TYPE_ENTRY(8311),
 		CPU_TYPE_ENTRY(8313),
 		CPU_TYPE_ENTRY(8314),
@@ -192,7 +193,7 @@ void upmconfig (uint upm, uint *table, uint size)
 
 
 int
-do_reset (cmd_tbl_t * cmdtp, int flag, int argc, char *argv[])
+do_reset (cmd_tbl_t * cmdtp, int flag, int argc, char * const argv[])
 {
 	ulong msr;
 #ifndef MPC83xx_RESET

@@ -47,6 +47,7 @@
 #define CMD_M25PXX_DP		0xb9	/* Deep Power-down */
 #define CMD_M25PXX_RES		0xab	/* Release from DP, and Read Signature */
 
+#define STM_ID_M25P10		0x2011
 #define STM_ID_M25P16		0x2015
 #define STM_ID_M25P20		0x2012
 #define STM_ID_M25P32		0x2016
@@ -81,6 +82,13 @@ static inline struct stmicro_spi_flash *to_stmicro_spi_flash(struct spi_flash
 }
 
 static const struct stmicro_spi_flash_params stmicro_spi_flash_table[] = {
+	{
+		.idcode1 = STM_ID_M25P10,
+		.page_size = 256,
+		.pages_per_sector = 128,
+		.nr_sectors = 4,
+		.name = "M25P10",
+	},
 	{
 		.idcode1 = STM_ID_M25P16,
 		.page_size = 256,
@@ -403,7 +411,6 @@ struct spi_flash *spi_flash_probe_stmicro(struct spi_slave *spi, u8 * idcode)
 	unsigned short id;
 	unsigned int i;
 
-	id = ((idcode[1] << 8) | idcode[2]);
 
 	for (i = 0; i < ARRAY_SIZE(stmicro_spi_flash_table); i++) {
 		params = &stmicro_spi_flash_table[i];
@@ -433,8 +440,9 @@ struct spi_flash *spi_flash_probe_stmicro(struct spi_slave *spi, u8 * idcode)
 	stm->flash.size = params->page_size * params->pages_per_sector
 	    * params->nr_sectors;
 
-	debug("SF: Detected %s with page size %u, total %u bytes\n",
-	      params->name, params->page_size, stm->flash.size);
+	printf("SF: Detected %s with page size %u, total ",
+	       params->name, params->page_size);
+	print_size(stm->flash.size, "\n");
 
 	return &stm->flash;
 }
