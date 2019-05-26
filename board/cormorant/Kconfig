@@ -1,0 +1,9 @@
+if TARGET_CORMORANT
+
+config SYS_BOARD
+	default "cormorant"
+
+config SYS_CONFIG_NAME
+	default "cormorant"
+
+endif

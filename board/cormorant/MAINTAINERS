@@ -1,0 +1,6 @@
+Cormorant Autopilot
+M:	Ben Coughlan <ben.coughlan@cgsy.com>
+S:	Maintained
+F:	board/cormorant
+F:	include/configs/cormorant.h
+F:	configs/cormorant_defconfig

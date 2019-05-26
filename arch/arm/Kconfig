@@ -295,7 +295,7 @@ config SYS_CACHELINE_SIZE
 
 config SYS_ARCH_TIMER
 	bool "ARM Generic Timer support"
-	depends on CPU_V7A || ARM64
+	depends on CPU_V7M || CPU_V7A || ARM64
 	default y if ARM64
 	help
 	  The ARM Generic Timer (aka arch-timer) provides an architected
@@ -1452,6 +1452,10 @@ config ARCH_ASPEED
 	select OF_CONTROL
 	imply CMD_DM
 
+config ARCH_M2S
+	bool "Support SmartFusion2 SoC"
+	select CPU_V7M
+
 endchoice
 
 config TI_SECURE_DEVICE
@@ -1519,6 +1523,8 @@ source "arch/arm/mach-orion5x/Kconfig"
 source "arch/arm/mach-owl/Kconfig"
 
 source "arch/arm/mach-rmobile/Kconfig"
+
+source "arch/arm/mach-m2s/Kconfig"
 
 source "arch/arm/mach-meson/Kconfig"
 
