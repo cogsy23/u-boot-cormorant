@@ -22,9 +22,9 @@
 #
 
 VERSION = 2010
-PATCHLEVEL = 06
+PATCHLEVEL = 09
 SUBLEVEL =
-EXTRAVERSION =
+EXTRAVERSION = -rc1
 ifneq "$(SUBLEVEL)" ""
 U_BOOT_VERSION = $(VERSION).$(PATCHLEVEL).$(SUBLEVEL)$(EXTRAVERSION)
 else
@@ -222,6 +222,7 @@ LIBS += drivers/spi/libspi.a
 LIBS += drivers/switch/libswitch.a
 ifeq ($(CPU),mpc83xx)
 LIBS += drivers/qe/qe.a
+LIBS += arch/powerpc/cpu/mpc8xxx/lib8xxx.a
 endif
 ifeq ($(CPU),mpc85xx)
 LIBS += drivers/qe/qe.a
@@ -245,6 +246,20 @@ LIBS += common/libcommon.a
 LIBS += lib/libfdt/libfdt.a
 LIBS += api/libapi.a
 LIBS += post/libpost.a
+
+ifeq ($(SOC),omap3)
+LIBS += $(CPUDIR)/omap-common/libomap-common.a
+endif
+ifeq ($(SOC),omap4)
+LIBS += $(CPUDIR)/omap-common/libomap-common.a
+endif
+
+ifeq ($(SOC),s5pc1xx)
+LIBS += $(CPUDIR)/s5p-common/libs5p-common.a
+endif
+ifeq ($(SOC),s5pc2xx)
+LIBS += $(CPUDIR)/s5p-common/libs5p-common.a
+endif
 
 LIBS := $(addprefix $(obj),$(LIBS))
 .PHONY : $(LIBS) $(TIMESTAMP_FILE) $(VERSION_FILE)
@@ -1812,6 +1827,7 @@ P2010RDB_config \
 P2010RDB_NAND_config \
 P2010RDB_SDCARD_config \
 P2010RDB_SPIFLASH_config \
+P2020DS_DDR2_config \
 P2020RDB_config \
 P2020RDB_NAND_config \
 P2020RDB_SDCARD_config \
@@ -1906,7 +1922,7 @@ CPUAT91_RAM_config \
 CPUAT91_config	:	unconfig
 	@mkdir -p $(obj)include
 	@echo "#define CONFIG_$(@:_config=) 1"	>$(obj)include/config.h
-	@$(MKCONFIG) -n $@ -a cpuat91 arm arm920t cpuat91 eukrea at91rm9200
+	@$(MKCONFIG) -n $@ -a cpuat91 arm arm920t cpuat91 eukrea at91
 
 #########################################################################
 ## ARM926EJ-S Systems
@@ -2389,6 +2405,15 @@ trizepsiv_config	:	unconfig
 		echo "#define CONFIG_POLARIS 1"	>>$(obj)include/config.h ; \
 	fi;
 	@$(MKCONFIG) -n $@ -a trizepsiv arm pxa trizepsiv
+
+vpac270_nor_config \
+vpac270_onenand_config	: unconfig
+	@mkdir -p $(obj)include
+	@if [ "$(findstring onenand,$@)" ] ; then \
+		echo "#define CONFIG_ONENAND_U_BOOT" \
+			>>$(obj)include/config.h ; \
+	fi;
+	@$(MKCONFIG) -n $@ -a vpac270 arm pxa vpac270
 
 #########################################################################
 ## ARM1136 Systems

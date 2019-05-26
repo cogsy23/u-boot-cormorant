@@ -318,7 +318,7 @@ void __mii_init(void)
  *	  Otherwise they hang in mii_send() !!! Sorry!
  */
 
-int mcffec_miiphy_read(char *devname, unsigned char addr, unsigned char reg,
+int mcffec_miiphy_read(const char *devname, unsigned char addr, unsigned char reg,
 		       unsigned short *value)
 {
 	short rdreg;		/* register working value */
@@ -337,7 +337,7 @@ int mcffec_miiphy_read(char *devname, unsigned char addr, unsigned char reg,
 	return 0;
 }
 
-int mcffec_miiphy_write(char *devname, unsigned char addr, unsigned char reg,
+int mcffec_miiphy_write(const char *devname, unsigned char addr, unsigned char reg,
 			unsigned short value)
 {
 	short rdreg;		/* register working value */

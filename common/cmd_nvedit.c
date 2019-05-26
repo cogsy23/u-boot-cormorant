@@ -409,10 +409,8 @@ void forceenv (char *varname, char *varvalue)
 
 int do_setenv (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
-	if (argc < 2) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 2)
+		return cmd_usage(cmdtp);
 
 	return _do_setenv (flag, argc, argv);
 }
@@ -435,15 +433,13 @@ int do_askenv ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	local_args[2] = NULL;
 	local_args[3] = NULL;
 
-	if (argc < 2) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 2)
+		return cmd_usage(cmdtp);
+
 	/* Check the syntax */
 	switch (argc) {
 	case 1:
-		cmd_usage(cmdtp);
-		return 1;
+		return cmd_usage(cmdtp);
 
 	case 2:		/* askenv envname */
 		sprintf (message, "Please enter '%s':", argv[1]);
@@ -505,10 +501,8 @@ int do_editenv(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	char *init_val;
 	int len;
 
-	if (argc < 2) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 2)
+		return cmd_usage(cmdtp);
 
 	/* Set read buffer to initial value or empty sting */
 	init_val = getenv(argv[1]);
@@ -551,7 +545,7 @@ char *getenv (char *name)
 	return (NULL);
 }
 
-int getenv_r (char *name, char *buf, unsigned len)
+int getenv_f(char *name, char *buf, unsigned len)
 {
 	int i, nxt;
 
@@ -565,13 +559,19 @@ int getenv_r (char *name, char *buf, unsigned len)
 		}
 		if ((val=envmatch((uchar *)name, i)) < 0)
 			continue;
+
 		/* found; copy out */
-		n = 0;
-		while ((len > n++) && (*buf++ = env_get_char(val++)) != '\0')
-			;
-		if (len == n)
-			*buf = '\0';
-		return (n);
+		for (n=0; n<len; ++n, ++buf) {
+			if ((*buf = env_get_char(val++)) == '\0')
+				return n;
+		}
+
+		if (n)
+			*--buf = '\0';
+
+		printf("env_buf too small [%d]\n", len);
+
+		return n;
 	}
 	return (-1);
 }

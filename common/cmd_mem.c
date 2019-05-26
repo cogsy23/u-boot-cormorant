@@ -82,10 +82,8 @@ int do_mem_md ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	size = dp_last_size;
 	length = dp_last_length;
 
-	if (argc < 2) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 2)
+		return cmd_usage(cmdtp);
 
 	if ((flag & CMD_FLAG_REPEAT) == 0) {
 		/* New command specified.  Check for a size specification.
@@ -178,10 +176,8 @@ int do_mem_mw ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	ulong	addr, writeval, count;
 	int	size;
 
-	if ((argc < 3) || (argc > 4)) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if ((argc < 3) || (argc > 4))
+		return cmd_usage(cmdtp);
 
 	/* Check for size specification.
 	*/
@@ -222,10 +218,8 @@ int do_mem_mdc ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	int i;
 	ulong count;
 
-	if (argc < 4) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 4)
+		return cmd_usage(cmdtp);
 
 	count = simple_strtoul(argv[3], NULL, 10);
 
@@ -251,10 +245,8 @@ int do_mem_mwc ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	int i;
 	ulong count;
 
-	if (argc < 4) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 4)
+		return cmd_usage(cmdtp);
 
 	count = simple_strtoul(argv[3], NULL, 10);
 
@@ -282,10 +274,8 @@ int do_mem_cmp (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	int	size;
 	int     rcode = 0;
 
-	if (argc != 4) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc != 4)
+		return cmd_usage(cmdtp);
 
 	/* Check for size specification.
 	*/
@@ -366,10 +356,8 @@ int do_mem_cp ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	ulong	addr, dest, count;
 	int	size;
 
-	if (argc != 4) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc != 4)
+		return cmd_usage(cmdtp);
 
 	/* Check for size specification.
 	*/
@@ -519,10 +507,8 @@ int do_mem_loop (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	volatile ushort *shortp;
 	volatile u_char	*cp;
 
-	if (argc < 3) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 3)
+		return cmd_usage(cmdtp);
 
 	/* Check for a size spefication.
 	 * Defaults to long if no or incorrect specification.
@@ -590,10 +576,8 @@ int do_mem_loopw (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	volatile ushort *shortp;
 	volatile u_char	*cp;
 
-	if (argc < 4) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 4)
+		return cmd_usage(cmdtp);
 
 	/* Check for a size spefication.
 	 * Defaults to long if no or incorrect specification.
@@ -1025,10 +1009,8 @@ mod_mem(cmd_tbl_t *cmdtp, int incrflag, int flag, int argc, char * const argv[])
 	int	nbytes, size;
 	extern char console_buffer[];
 
-	if (argc != 2) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc != 2)
+		return cmd_usage(cmdtp);
 
 #ifdef CONFIG_BOOT_RETRY_TIME
 	reset_cmd_timeout();	/* got a good command to get here */
@@ -1130,10 +1112,8 @@ int do_mem_crc (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	ulong crc;
 	ulong *ptr;
 
-	if (argc < 3) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 3)
+		return cmd_usage(cmdtp);
 
 	addr = simple_strtoul (argv[1], NULL, 16);
 	addr += base_address;
@@ -1166,9 +1146,8 @@ int do_mem_crc (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	char * const *av;
 
 	if (argc < 3) {
-  usage:
-		cmd_usage(cmdtp);
-		return 1;
+usage:
+		return cmd_usage(cmdtp);
 	}
 
 	av = argv + 1;
@@ -1216,10 +1195,8 @@ int do_md5sum(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	unsigned int i;
 	u8 output[16];
 
-	if (argc < 3) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 3)
+		return cmd_usage(cmdtp);
 
 	addr = simple_strtoul(argv[1], NULL, 16);
 	len = simple_strtoul(argv[2], NULL, 16);
@@ -1241,10 +1218,8 @@ int do_sha1sum(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	unsigned int i;
 	u8 output[20];
 
-	if (argc < 3) {
-		cmd_usage(cmdtp);
-		return 1;
-	}
+	if (argc < 3)
+		return cmd_usage(cmdtp);
 
 	addr = simple_strtoul(argv[1], NULL, 16);
 	len = simple_strtoul(argv[2], NULL, 16);
@@ -1274,8 +1249,7 @@ int do_unzip ( cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 			dst = simple_strtoul(argv[2], NULL, 16);
 			break;
 		default:
-			cmd_usage(cmdtp);
-			return 1;
+			return cmd_usage(cmdtp);
 	}
 
 	return !!gunzip((void *) dst, dst_len, (void *) src, &src_len);
