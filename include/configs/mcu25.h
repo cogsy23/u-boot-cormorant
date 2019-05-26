@@ -86,15 +86,8 @@
  * If CONFIG_SYS_405_UART_ERRATA_59 and 200MHz CPU clock,
  * set Linux BASE_BAUD to 403200.
  */
-/* needed to be able to define CONFIG_SERIAL_SOFTWARE_FIFO */
 #undef	CONFIG_SYS_405_UART_ERRATA_59	       /* 405GP/CR Rev. D silicon */
 #define CONFIG_SYS_BASE_BAUD	    691200
-
-/* Size (bytes) of interrupt driven serial port buffer.
- * Set to 0 to use polling instead of interrupts.
- * Setting to 0 will also disable RTS/CTS handshaking.
- */
-#undef CONFIG_SERIAL_SOFTWARE_FIFO
 
 /* Set console baudrate to 9600 */
 #define CONFIG_BAUDRATE		9600
@@ -199,7 +192,7 @@
 				 CONFIG_SYS_POST_ETHER	   | \
 				 CONFIG_SYS_POST_SPR)
 
-#define CONFIG_SYS_POST_UART_TABLE	{UART0_BASE}
+#define CONFIG_SYS_POST_UART_TABLE	{ CONFIG_SYS_NS16550_COM1 }
 #undef  CONFIG_LOGBUFFER
 #define CONFIG_SYS_POST_CACHE_ADDR	0x00800000 /* free virtual address	*/
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV /* Otherwise it catches logbuffer as output */

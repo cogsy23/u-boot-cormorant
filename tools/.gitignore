@@ -11,3 +11,8 @@
 /lpc178x_fcg
 /lpc18xx_bootheader
 /*.exe
+/easylogo/easylogo
+/env/crc32.c
+/env/fw_printenv
+/gdb/gdbcont
+/gdb/gdbsend
