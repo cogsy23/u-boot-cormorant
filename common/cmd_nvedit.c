@@ -547,8 +547,7 @@ int envmatch (uchar *s1, int i2)
 static int do_env_default(cmd_tbl_t * cmdtp, int flag, int argc, char * const argv[])
 {
 	if ((argc != 2) || (strcmp(argv[1], "-f") != 0)) {
-		cmd_usage(cmdtp);
-		return 1;
+		return cmd_usage(cmdtp);
 	}
 	set_default_env("## Resetting to default environment\n");
 	return 0;
@@ -635,15 +634,13 @@ static int do_env_export(cmd_tbl_t *cmdtp, int flag, int argc, char * const argv
 				sep = '\n';
 				break;
 			default:
-				cmd_usage(cmdtp);
-				return 1;
+				return cmd_usage(cmdtp);
 			}
 		}
 	}
 
 	if (argc < 1) {
-		cmd_usage(cmdtp);
-		return 1;
+		return cmd_usage(cmdtp);
 	}
 
 	addr = (char *)simple_strtoul(argv[0], NULL, 16);
@@ -746,15 +743,13 @@ static int do_env_import(cmd_tbl_t * cmdtp, int flag, int argc, char * const arg
 				del = 1;
 				break;
 			default:
-				cmd_usage(cmdtp);
-				return 1;
+				return cmd_usage(cmdtp);
 			}
 		}
 	}
 
 	if (argc < 1) {
-		cmd_usage(cmdtp);
-		return 1;
+		return cmd_usage(cmdtp);
 	}
 
 	if (!fmt)
@@ -839,7 +834,7 @@ static cmd_tbl_t cmd_env_sub[] = {
 	U_BOOT_CMD_MKENT(set, CONFIG_SYS_MAXARGS, 0, do_env_set, "", ""),
 };
 
-#if !defined(CONFIG_RELOC_FIXUP_WORKS)
+#if defined(CONFIG_NEEDS_MANUAL_RELOC)
 void env_reloc(void)
 {
 	fixup_cmdtable(cmd_env_sub, ARRAY_SIZE(cmd_env_sub));
@@ -850,6 +845,9 @@ static int do_env (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 {
 	cmd_tbl_t *cp;
 
+	if (argc < 2)
+		return cmd_usage(cmdtp);
+
 	/* drop initial "env" arg */
 	argc--;
 	argv++;
@@ -859,8 +857,7 @@ static int do_env (cmd_tbl_t *cmdtp, int flag, int argc, char * const argv[])
 	if (cp)
 		return cp->cmd(cmdtp, flag, argc, argv);
 
-	cmd_usage(cmdtp);
-	return 1;
+	return cmd_usage(cmdtp);
 }
 
 U_BOOT_CMD(

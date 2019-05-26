@@ -1389,8 +1389,8 @@ in32r:
 relocate_code:
 #if defined(CONFIG_4xx_DCACHE) || defined(CONFIG_SYS_INIT_DCACHE_CS)
 	/*
-	 * We need to flush the initial global data (gd_t) before the dcache
-	 * will be invalidated.
+	 * We need to flush the initial global data (gd_t) and bd_info
+	 * before the dcache will be invalidated.
 	 */
 
 	/* Save registers */
@@ -1398,10 +1398,11 @@ relocate_code:
 	mr	r10, r4
 	mr	r11, r5
 
-	/* Flush initial global data range */
-	mr	r3, r4
-	addi	r4, r4, GENERATED_GBL_DATA_SIZE@l
-	bl	flush_dcache_range
+	/*
+	 * Flush complete dcache, this is faster than flushing the
+	 * ranges for global_data and bd_info instead.
+	 */
+	bl	flush_dcache
 
 #if defined(CONFIG_SYS_INIT_DCACHE_CS)
 	/*
@@ -1611,7 +1612,7 @@ in_ram:
 	lwzux	r0,r4,r11
 	cmpwi	r0,0
 	add	r0,r0,r11
-	stw	r10,0(r3)
+	stw	r4,0(r3)
 	beq-	5f
 	stw	r0,0(r4)
 5:	bdnz	3b

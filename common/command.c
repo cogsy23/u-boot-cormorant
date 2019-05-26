@@ -108,6 +108,8 @@ cmd_tbl_t *find_cmd_tbl (const char *cmd, cmd_tbl_t *table, int table_len)
 	int len;
 	int n_found = 0;
 
+	if (!cmd)
+		return NULL;
 	/*
 	 * Some commands allow length modifiers (like "cp.b");
 	 * compare command name only until first dot.
@@ -466,7 +468,7 @@ int cmd_get_data_size(char* arg, int default_size)
 }
 #endif
 
-#if !defined(CONFIG_RELOC_FIXUP_WORKS)
+#if defined(CONFIG_NEEDS_MANUAL_RELOC)
 DECLARE_GLOBAL_DATA_PTR;
 
 void fixup_cmdtable(cmd_tbl_t *cmdtp, int size)

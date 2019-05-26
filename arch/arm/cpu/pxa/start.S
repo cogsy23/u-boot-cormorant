@@ -33,7 +33,6 @@
 #include <config.h>
 #include <version.h>
 #include <asm/arch/pxa-regs.h>
-#include <asm/arch/macro.h>
 
 /* takes care the CP15 update has taken place */
 .macro CPWAIT reg
@@ -221,6 +220,7 @@ zerojmp:
 /* Set stackpointer in internal RAM to call board_init_f */
 call_board_init_f:
 	ldr	sp, =(CONFIG_SYS_INIT_SP_ADDR)
+	bic	sp, sp, #7 /* 8-byte alignment for ABI compliance */
 	ldr	r0,=0x00000000
 	bl	board_init_f
 
@@ -238,24 +238,23 @@ relocate_code:
 	mov	r4, r0	/* save addr_sp */
 	mov	r5, r1	/* save addr of gd */
 	mov	r6, r2	/* save addr of destination */
-	mov	r7, r2	/* save addr of destination */
 
 	/* Set up the stack						    */
 stack_setup:
 	mov	sp, r4
 
 	adr	r0, _start
+	cmp	r0, r6
+	beq	clear_bss		/* skip relocation */
+	mov	r1, r6			/* r1 <- scratch for copy_loop */
 	ldr	r2, _TEXT_BASE
 	ldr	r3, _bss_start_ofs
 	add	r2, r0, r3		/* r2 <- source end address	    */
-	cmp	r0, r6
-	beq	clear_bss
 
-#ifndef CONFIG_SKIP_RELOCATE_UBOOT
 	stmfd sp!, {r0-r12}
 copy_loop:
 	ldmia	r0!, {r3-r5, r7-r11}	/* copy from source address [r0]    */
-	stmia	r6!, {r3-r5, r7-r11}	/* copy to   target address [r1]    */
+	stmia	r1!, {r3-r5, r7-r11}	/* copy to   target address [r1]    */
 	cmp	r0, r2			/* until source end address [r2]    */
 	blo	copy_loop
 	ldmfd sp!, {r0-r12}
@@ -265,7 +264,7 @@ copy_loop:
 	 * fix .rel.dyn relocations
 	 */
 	ldr	r0, _TEXT_BASE		/* r0 <- Text base */
-	sub	r9, r7, r0		/* r9 <- relocation offset */
+	sub	r9, r6, r0		/* r9 <- relocation offset */
 	ldr	r10, _dynsym_start_ofs	/* r10 <- sym table ofs */
 	add	r10, r10, r0		/* r10 <- sym table in FLASH */
 	ldr	r2, _rel_dyn_start_ofs	/* r2 <- rel dyn start ofs */
@@ -276,10 +275,10 @@ fixloop:
 	ldr	r0, [r2]	/* r0 <- location to fix up, IN FLASH! */
 	add	r0, r9		/* r0 <- location to fix up in RAM */
 	ldr	r1, [r2, #4]
-	and	r8, r1, #0xff
-	cmp	r8, #23		/* relative fixup? */
+	and	r7, r1, #0xff
+	cmp	r7, #23		/* relative fixup? */
 	beq	fixrel
-	cmp	r8, #2		/* absolute fixup? */
+	cmp	r7, #2		/* absolute fixup? */
 	beq	fixabs
 	/* ignore unknown type of fixup */
 	b	fixnext
@@ -288,7 +287,7 @@ fixabs:
 	mov	r1, r1, LSR #4		/* r1 <- symbol index in .dynsym */
 	add	r1, r10, r1		/* r1 <- address of symbol in table */
 	ldr	r1, [r1, #4]		/* r1 <- symbol value */
-	add	r1, r9			/* r1 <- relocated sym addr */
+	add	r1, r1, r9		/* r1 <- relocated sym addr */
 	b	fixnext
 fixrel:
 	/* relative fix: increase location by offset */
@@ -299,15 +298,14 @@ fixnext:
 	add	r2, r2, #8	/* each rel.dyn entry is 8 bytes */
 	cmp	r2, r3
 	blo	fixloop
-#endif
-#endif	/* #ifndef CONFIG_SKIP_RELOCATE_UBOOT */
+#endif	/* #ifndef CONFIG_PRELOADER */
 
 clear_bss:
 #ifndef CONFIG_PRELOADER
 	ldr	r0, _bss_start_ofs
 	ldr	r1, _bss_end_ofs
 	ldr	r3, _TEXT_BASE		/* Text base */
-	mov	r4, r7			/* reloc addr */
+	mov	r4, r6			/* reloc addr */
 	add	r0, r0, r4
 	add	r1, r1, r4
 	mov	r2, #0x00000000		/* clear			    */
@@ -316,7 +314,7 @@ clbss_l:str	r2, [r0]		/* clear loop...		    */
 	add	r0, r0, #4
 	cmp	r0, r1
 	bne	clbss_l
-#endif
+#endif	/* #ifndef CONFIG_PRELOADER */
 
 /*
  * We are done. Do not return, instead branch to second part of board
@@ -332,18 +330,16 @@ _start_oneboot_ofs
 	ldr	r0, _board_init_r_ofs
 	adr	r1, _start
 	add	lr, r0, r1
-#ifndef CONFIG_SKIP_RELOCATE_UBOOT
 	add	lr, lr, r9
-#endif
 	/* setup parameters for board_init_r */
 	mov	r0, r5		/* gd_t */
-	mov	r1, r7		/* dest_addr */
+	mov	r1, r6		/* dest_addr */
 	/* jump to it ... */
 	mov	pc, lr
 
 _board_init_r_ofs:
 	.word board_init_r - _start
-#endif
+#endif	/* CONFIG_ONENAND_IPL */
 
 _rel_dyn_start_ofs:
 	.word __rel_dyn_start - _start
@@ -352,7 +348,7 @@ _rel_dyn_end_ofs:
 _dynsym_start_ofs:
 	.word __dynsym_start - _start
 
-#else /* #if !defined(CONFIG_SYS_ARM_WITHOUT_RELOC) */
+#else /* CONFIG_PRELOADER */
 
 /****************************************************************************/
 /*									    */
@@ -377,7 +373,7 @@ reset:
 	/* Start OneNAND IPL */
 	ldr	pc, =start_oneboot
 
-#endif /* #if !defined(CONFIG_ONENAND_IPL) */
+#endif /* CONFIG_PRELOADER */
 
 #ifndef CONFIG_PRELOADER
 /****************************************************************************/
@@ -419,13 +415,7 @@ reset:
 	stmia	sp, {r0 - r12}			/* Calling r0-r12	    */
 	add	r8, sp, #S_PC
 
-#if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
-	ldr	r2, _armboot_start
-	sub	r2, r2, #(CONFIG_STACKSIZE+CONFIG_SYS_MALLOC_LEN)
-	sub	r2, r2, #(GENERATED_GBL_DATA_SIZE+8)	@ set base 2 words into abort stack
-#else
 	ldr	r2, IRQ_STACK_START_IN
-#endif
 	ldmia	r2, {r2 - r4}			/* get pc, cpsr, old_r0	    */
 	add	r0, sp, #S_FRAME_SIZE		/* restore sp_SVC	    */
 
@@ -460,13 +450,7 @@ reset:
 	.endm
 
 	.macro get_bad_stack
-#if defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
-	ldr	r13, _armboot_start		@ setup our mode stack
-	sub	r13, r13, #(CONFIG_STACKSIZE+CONFIG_SYS_MALLOC_LEN)
-	sub	r13, r13, #(GENERATED_GBL_DATA_SIZE+8) @ reserved a couple spots in abort stack
-#else
 	ldr	r13, IRQ_STACK_START_IN		@ setup our mode stack
-#endif
 
 	str	lr, [r13]			@ save caller lr / spsr
 	mrs	lr, spsr
@@ -485,7 +469,7 @@ reset:
 	.macro get_fiq_stack			@ setup FIQ stack
 	ldr	sp, FIQ_STACK_START
 	.endm
-#endif	/* CONFIG_PRELOADER */
+#endif	/* CONFIG_PRELOADER
 
 
 /****************************************************************************/
@@ -499,7 +483,7 @@ reset:
 do_hang:
 	ldr	sp, _TEXT_BASE			/* use 32 words abort stack */
 	bl	hang				/* hang and never return */
-#else	/* !CONFIG_PRELOADER */
+#else
 	.align	5
 undefined_instruction:
 	get_bad_stack
@@ -618,4 +602,4 @@ mmu_table:
 	.word	(__base << 20) | 0xc12
 	.set	__base, __base + 1
 	.endr
-#endif
+#endif	/* CONFIG_PRELOADER */

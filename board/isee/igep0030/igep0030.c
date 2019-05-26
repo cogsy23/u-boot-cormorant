@@ -24,10 +24,13 @@
 #include <twl4030.h>
 #include <asm/io.h>
 #include <asm/arch/mem.h>
+#include <asm/arch/mmc_host_def.h>
 #include <asm/arch/mux.h>
 #include <asm/arch/sys_proto.h>
 #include <asm/mach-types.h>
 #include "igep0030.h"
+
+DECLARE_GLOBAL_DATA_PTR;
 
 /*
  * Routine: board_init
@@ -35,8 +38,6 @@
  */
 int board_init(void)
 {
-	DECLARE_GLOBAL_DATA_PTR;
-
 	gpmc_init(); /* in SRAM or SDRAM, finish GPMC */
 	/* board id for Linux */
 	gd->bd->bi_arch_number = MACH_TYPE_IGEP0030;
@@ -45,6 +46,14 @@ int board_init(void)
 
 	return 0;
 }
+
+#ifdef CONFIG_GENERIC_MMC
+int board_mmc_init(bd_t *bis)
+{
+	omap_mmc_init(0);
+	return 0;
+}
+#endif
 
 /*
  * Routine: misc_init_r

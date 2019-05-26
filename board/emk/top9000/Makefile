@@ -1,6 +1,9 @@
 #
-# (C) Copyright 2000-2006
+# (C) Copyright 2003-2008
 # Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+#
+# (C) Copyright 2010
+# Reinhard Meyer, EMK Elektronik, reinhard.meyer@emk-elektronik.de
 #
 # See file CREDITS for list of people who contributed to this
 # project.
@@ -12,7 +15,7 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
@@ -23,16 +26,23 @@
 
 include $(TOPDIR)/config.mk
 
-LIB	= $(obj)lib$(BOARD).a
+LIB	= $(obj)lib$(BOARD).o
 
-COBJS =  $(BOARD).o flash.o
+COBJS-y	+= $(BOARD).o
+COBJS-$(CONFIG_ATMEL_SPI)	+= spi.o
 
-SRCS	:= $(SOBJS:.o=.S) $(COBJS:.o=.c)
-OBJS	:= $(addprefix $(obj),$(COBJS))
+SRCS	:= $(SOBJS:.o=.S) $(COBJS-y:.o=.c)
+OBJS	:= $(addprefix $(obj),$(COBJS-y))
 SOBJS	:= $(addprefix $(obj),$(SOBJS))
 
-$(LIB):	$(obj).depend $(OBJS)
-	$(AR) $(ARFLAGS) $@ $(OBJS)
+$(LIB):	$(obj).depend $(OBJS) $(SOBJS)
+	$(call cmd_link_o_target, $(OBJS) $(SOBJS))
+
+clean:
+	rm -f $(SOBJS) $(OBJS)
+
+distclean:	clean
+	rm -f $(LIB) core *.bak $(obj).depend
 
 #########################################################################
 

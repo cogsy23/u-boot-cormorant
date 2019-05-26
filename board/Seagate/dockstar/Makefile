@@ -1,6 +1,10 @@
 #
-# (C) Copyright 2001-2006
-# Wolfgang Denk, DENX Software Engineering, wd@denx.de.
+# Copyright (C) 2010  Eric C. Cooper <ecc@cmu.edu>
+#
+# Based on sheevaplug/Makefile originally written by
+# Prafulla Wadaskar <prafulla@marvell.com>
+# (C) Copyright 2009
+# Marvell Semiconductor <www.marvell.com>
 #
 # See file CREDITS for list of people who contributed to this
 # project.
@@ -12,34 +16,33 @@
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-# MA 02111-1307 USA
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA 02110-1301 USA
 #
 
 include $(TOPDIR)/config.mk
 
-LIB	= $(obj)lib$(BOARD).a
+LIB	= $(obj)lib$(BOARD).o
 
-COBJS	= $(BOARD).o flash.o
-SOBJS	= init.o
+COBJS	:= dockstar.o
 
 SRCS	:= $(SOBJS:.o=.S) $(COBJS:.o=.c)
 OBJS	:= $(addprefix $(obj),$(COBJS))
 SOBJS	:= $(addprefix $(obj),$(SOBJS))
 
-$(LIB):	$(OBJS) $(SOBJS)
-	$(AR) $(ARFLAGS) $@ $(OBJS) $(SOBJS)
+$(LIB):	$(obj).depend $(OBJS) $(SOBJS)
+	$(call cmd_link_o_target, $(OBJS) $(SOBJS))
 
 clean:
 	rm -f $(SOBJS) $(OBJS)
 
 distclean:	clean
-	rm -f $(LIB) core *.bak $(obj).depend
+	rm -f $(LIB) core *.bak .depend
 
 #########################################################################
 

@@ -45,8 +45,6 @@
 #define CONFIG_DISPLAY_CPUINFO
 #define CONFIG_DISPLAY_BOARDINFO
 
-#undef CONFIG_SKIP_RELOCATE_UBOOT
-
 /* input clock of PLL: SMDKC100 has 12MHz input clock */
 #define CONFIG_SYS_CLK_FREQ		12000000
 
@@ -232,6 +230,8 @@
 #define CONFIG_SYS_ONENAND_BASE		0xE7100000
 
 #define CONFIG_DOS_PARTITION		1
+
+#define CONFIG_SYS_INIT_SP_ADDR	(CONFIG_SYS_LOAD_ADDR - 0x1000000)
 
 /*
  * Ethernet Contoller driver

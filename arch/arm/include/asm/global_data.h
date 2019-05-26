@@ -55,13 +55,15 @@ typedef	struct	global_data {
 	unsigned long	plla_rate_hz;
 	unsigned long	pllb_rate_hz;
 	unsigned long	at91_pllb_usb_init;
-	/* "static data" needed by at91's timer.c */
+#endif
+#ifdef CONFIG_ARM
+	/* "static data" needed by most of timer.c on ARM platforms */
 	unsigned long	timer_rate_hz;
 	unsigned long	tbl;
 	unsigned long	tbu;
 	unsigned long long	timer_reset_value;
+	unsigned long	lastinc;
 #endif
-#if !defined(CONFIG_SYS_ARM_WITHOUT_RELOC)
 	unsigned long	relocaddr;	/* Start address of U-Boot in RAM */
 	phys_size_t	ram_size;	/* RAM size */
 	unsigned long	mon_len;	/* monitor len */
@@ -70,7 +72,6 @@ typedef	struct	global_data {
 	unsigned long	reloc_off;
 #if !(defined(CONFIG_SYS_NO_ICACHE) && defined(CONFIG_SYS_NO_DCACHE))
 	unsigned long	tlb_addr;
-#endif
 #endif
 	void		**jt;		/* jump table */
 	char		env_buf[32];	/* buffer for getenv() before reloc. */

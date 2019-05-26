@@ -139,6 +139,7 @@
 
 /* Disabled commands */
 #undef CONFIG_CMD_NET
+#undef CONFIG_CMD_NFS
 #undef CONFIG_CMD_FPGA		/* FPGA configuration Support   */
 #undef CONFIG_CMD_IMLS		/* List all found images        */
 
@@ -232,6 +233,10 @@
 #define CONFIG_NR_DRAM_BANKS	1
 
 #define CONFIG_SYS_SDRAM_BASE		0x80000000
-#define CONFIG_SYS_INIT_SP_ADDR		(LOW_LEVEL_SRAM_STACK - GENERATED_GBL_DATA_SIZE)
+#define CONFIG_SYS_INIT_RAM_ADDR	0x4030D800
+#define CONFIG_SYS_INIT_RAM_SIZE	0x800
+#define CONFIG_SYS_INIT_SP_ADDR		(CONFIG_SYS_INIT_RAM_ADDR + \
+					 CONFIG_SYS_INIT_RAM_SIZE - \
+					 GENERATED_GBL_DATA_SIZE)
 
 #endif /* __CONFIG_H */

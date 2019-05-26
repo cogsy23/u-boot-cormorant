@@ -60,9 +60,6 @@ int checkboard(void)
 	return 0;
 }
 
-const char *board_hwconfig = "foo:bar=baz";
-const char *cpu_hwconfig = "foo:bar=baz";
-
 phys_size_t
 initdram(int board_type)
 {
@@ -157,9 +154,9 @@ void pci_init_board(void)
 	if (pcie_configured && !(devdisr & MPC86xx_DEVDISR_PCIEX1)) {
 		SET_STD_PCIE_INFO(pci_info[num], 1);
 		pcie_ep = fsl_setup_hose(&pcie1_hose, pci_info[num].regs);
-		printf("    PCIE1 connected to ULI as %s (base addr %lx)\n",
-				pcie_ep ? "Endpoint" : "Root Complex",
-				pci_info[num].regs);
+		printf("PCIE1: connected to ULI as %s (base addr %lx)\n",
+			pcie_ep ? "Endpoint" : "Root Complex",
+			pci_info[num].regs);
 		first_free_busno = fsl_pci_init_port(&pci_info[num++],
 					&pcie1_hose, first_free_busno);
 
@@ -171,22 +168,22 @@ void pci_init_board(void)
 				       + CONFIG_SYS_PCIE1_MEM_SIZE - 0x1000000)));
 
 	} else {
-		puts("    PCIE1: disabled\n");
+		puts("PCIE1: disabled\n");
 	}
 #else
-	puts("    PCIE1: disabled\n");
+	puts("PCIE1: disabled\n");
 #endif /* CONFIG_PCIE1 */
 
 #ifdef CONFIG_PCIE2
 	SET_STD_PCIE_INFO(pci_info[num], 2);
 	pcie_ep = fsl_setup_hose(&pcie2_hose, pci_info[num].regs);
-	printf("    PCIE2 connected as %s (base addr %lx)\n",
-			pcie_ep ? "Endpoint" : "Root Complex",
-			pci_info[num].regs);
+	printf("PCIE2: connected as %s (base addr %lx)\n",
+		pcie_ep ? "Endpoint" : "Root Complex",
+		pci_info[num].regs);
 	first_free_busno = fsl_pci_init_port(&pci_info[num++],
 				&pcie2_hose, first_free_busno);
 #else
-	puts("    PCIE2: disabled\n");
+	puts("PCIE2: disabled\n");
 #endif /* CONFIG_PCIE2 */
 
 }

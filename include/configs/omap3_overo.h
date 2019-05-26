@@ -119,6 +119,7 @@
 #define CONFIG_SYS_I2C_SLAVE		1
 #define CONFIG_SYS_I2C_BUS		0
 #define CONFIG_SYS_I2C_BUS_SELECT	1
+#define CONFIG_I2C_MULTI_BUS		1
 #define CONFIG_DRIVER_OMAP34XX_I2C	1
 
 /*
@@ -268,9 +269,6 @@
 #define PISMO1_NAND_SIZE		GPMC_SIZE_128M
 #define PISMO1_ONEN_SIZE		GPMC_SIZE_128M
 
-#define CONFIG_SYS_MAX_FLASH_SECT	520	/* max number of sectors on */
-						/* one chip */
-#define CONFIG_SYS_MAX_FLASH_BANKS	2	/* max number of flash banks */
 #define CONFIG_SYS_MONITOR_LEN		(256 << 10)	/* Reserve 2 sectors */
 
 #define CONFIG_SYS_FLASH_BASE		boot_flash_base
@@ -286,21 +284,6 @@
 #define CONFIG_SYS_ENV_SECT_SIZE	boot_flash_sec
 #define CONFIG_ENV_OFFSET		boot_flash_off
 #define CONFIG_ENV_ADDR			SMNAND_ENV_OFFSET
-
-/*-----------------------------------------------------------------------
- * CFI FLASH driver setup
- */
-/* timeout values are in ticks */
-#define CONFIG_SYS_FLASH_ERASE_TOUT	(100 * CONFIG_SYS_HZ)
-#define CONFIG_SYS_FLASH_WRITE_TOUT	(100 * CONFIG_SYS_HZ)
-
-/* Flash banks JFFS2 should use */
-#define CONFIG_SYS_MAX_MTD_BANKS	(CONFIG_SYS_MAX_FLASH_BANKS + \
-					CONFIG_SYS_MAX_NAND_DEVICE)
-#define CONFIG_SYS_JFFS2_MEM_NAND
-/* use flash_info[2] */
-#define CONFIG_SYS_JFFS2_FIRST_BANK	CONFIG_SYS_MAX_FLASH_BANKS
-#define CONFIG_SYS_JFFS2_NUM_BANKS	1
 
 #ifndef __ASSEMBLY__
 extern unsigned int boot_flash_base;
@@ -324,6 +307,10 @@ extern unsigned int boot_flash_type;
 #endif /* (CONFIG_CMD_NET) */
 
 #define CONFIG_SYS_SDRAM_BASE		PHYS_SDRAM_1
-#define CONFIG_SYS_INIT_SP_ADDR		(LOW_LEVEL_SRAM_STACK - GENERATED_GBL_DATA_SIZE)
+#define CONFIG_SYS_INIT_RAM_ADDR	0x4020f800
+#define CONFIG_SYS_INIT_RAM_SIZE	0x800
+#define CONFIG_SYS_INIT_SP_ADDR		(CONFIG_SYS_INIT_RAM_ADDR + \
+					 CONFIG_SYS_INIT_RAM_SIZE - \
+					 GENERATED_GBL_DATA_SIZE)
 
 #endif				/* __CONFIG_H */

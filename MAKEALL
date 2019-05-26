@@ -11,7 +11,7 @@
 # line; without any arguments, MAKEALL defaults to building all Power
 # Architecture systems (i. e. same as for "MAKEALL powerpc").
 #
-# With the iontroduction of the board.cfg file, it has become possible
+# With the introduction of the board.cfg file, it has become possible
 # to provide additional selections.  We use standard command line
 # options for this:
 #
@@ -125,6 +125,12 @@ FILTER="\$1 !~ /^#/"
 
 if [ "$SELECTED" ] ; then
 	SELECTED=$(awk '('"$FILTER"') { print $1 }' boards.cfg)
+
+	# Make sure some boards from boards.cfg are actually found
+	if [ -z "$SELECTED" ] ; then
+		echo "Error: No boards selected, invalid arguments"
+		exit 1
+	fi
 fi
 
 #########################################################################
@@ -181,6 +187,7 @@ boards_by_field()
 }
 boards_by_arch() { boards_by_field 2 "$@" ; }
 boards_by_cpu()  { boards_by_field 3 "$@" ; }
+boards_by_soc()  { boards_by_field 6 "$@" ; }
 
 #########################################################################
 ## MPC5xx Systems
@@ -433,11 +440,8 @@ LIST_ARMV7="		\
 ## AT91 Systems
 #########################################################################
 
-LIST_at91="			\
-	afeb9260		\
-	at91cap9adk		\
-	at91rm9200dk		\
-	at91rm9200ek		\
+LIST_at91="$(boards_by_soc at91)\
+	$(boards_by_soc at91rm9200)\
 	at91sam9260ek		\
 	at91sam9261ek		\
 	at91sam9263ek		\
@@ -445,19 +449,9 @@ LIST_at91="			\
 	at91sam9g20ek		\
 	at91sam9m10g45ek	\
 	at91sam9rlek		\
-	cmc_pu2			\
 	CPUAT91			\
 	CPU9260			\
 	CPU9G20			\
-	csb637			\
-	eb_cpux9k2		\
-	kb9202			\
-	meesc			\
-	mp2usb			\
-	m501sk			\
-	otc570			\
-	pm9261			\
-	pm9263			\
 	pm9g45			\
 	SBC35_A9G20		\
 	TNY_A9260		\

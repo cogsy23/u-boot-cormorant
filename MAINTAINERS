@@ -310,10 +310,11 @@ Tirumala Marri <tmarri@apm.com>
 
 	bluestone       APM821XX
 
-Reinhard Meyer <r.meyer@emk-elektronik.de>
+Reinhard Meyer <reinhard.meyer@emk-elektronik.de>
 
 	TOP860		MPC860T
 	TOP5200		MPC5200
+	TOP9000		ARM926EJS (AT91SAM9xxx SoC)
 
 Tolunay Orkun <torkun@nextio.com>
 
@@ -524,8 +525,6 @@ Unknown / orphaned boards:
 	RPXClassic	MPC8xx
 	RPXlite		MPC8xx
 
-	ERIC		PPC4xx
-
 	MOUSSE		MPC824x
 
 	RPXsuper	MPC8260
@@ -590,6 +589,10 @@ Rick Bronson <rick@efn.org>
 Po-Yu Chuang <ratbert@faraday-tech.com>
 
 	a320evb		FA526 (ARM920T-like) (a320 SoC)
+
+Eric Cooper <ecc@cmu.edu>
+
+	dockstar	ARM926EJS (Kirkwood SoC)
 
 George G. Davis <gdavis@mvista.com>
 
