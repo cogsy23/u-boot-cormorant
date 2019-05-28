@@ -41,9 +41,10 @@ static void soc_cache_enable(void)
 /*
  * SoC configuration code that cannot be put into drivers
  */
-#if defined(CONFIG_ARCH_EARLY_INIT_R)
-int arch_early_init_r(void)
+#if defined(CONFIG_ARCH_MISC_INIT)
+int arch_misc_init(void)
 {
+	yellow_led_on();
 
 #ifdef CONFIG_M2S_CACHE_ON
 
@@ -86,4 +87,4 @@ int arch_early_init_r(void)
 	};
 	mpu_config(&cfg);
 }
-#endif /* CONFIG_ARCH_EARLY_INIT_R */
+#endif /* CONFIG_ARCH_MISC_INIT */
