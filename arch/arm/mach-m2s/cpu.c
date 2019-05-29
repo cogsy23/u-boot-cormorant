@@ -44,5 +44,5 @@ int arch_cpu_init(void)
 	 */
 	gd->bd->bi_boot_params = CONFIG_SYS_RAM_BASE;
 
-        return 0;
+	return 0;
 }

@@ -1,0 +1,17 @@
+/dts-v1/;
+
+#include "armv7-m.dtsi"
+
+/ {
+	model = "Cormorant Autopilot";
+	compatible = "cormorant", "m2s";
+
+	chosen {
+		bootargs = "root=/dev/ram";
+		stdout-path = "serial0:115200n8";
+	};
+
+	//aliases {
+	//	serial0 = &usart1;
+	//};
+};

@@ -15,20 +15,6 @@ int dram_init(void)
 
 int board_init(void)
 {
-	blue_led_on();
-	return 0;
-}
-
-int board_early_init_f(void)
-{
-	green_led_on();
-	return 0;
-
-}
-
-int board_early_init_r(void)
-{
-	red_led_on();
 	return 0;
 }
 
