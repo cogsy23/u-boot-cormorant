@@ -38,6 +38,10 @@
 		stdout-path = "serial0:115200n8";
 	};
 
+	memory {
+		reg = <0xA0000000 0x8000000>;
+	};
+
 	aliases {
 		serial0 = &uart0;
 	};

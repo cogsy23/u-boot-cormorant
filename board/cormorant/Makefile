@@ -4,3 +4,4 @@
 # Author(s): Ben Coughlan, <ben.coughlan@cgsy.com.au>.
 
 obj-y	:= cormorant.o
+obj-y	+= board.o
