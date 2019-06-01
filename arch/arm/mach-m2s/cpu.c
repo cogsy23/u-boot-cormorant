@@ -4,8 +4,6 @@
  * Author(s): Ben Coughlan, <ben.coughlan@cgsy.com.au>.
  */
 #include <common.h>
-#include <envm.h>
-#include <clock.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 

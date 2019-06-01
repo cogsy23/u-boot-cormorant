@@ -31,25 +31,18 @@
  */
 static void soc_cache_enable(void)
 {
-	/*
-	 * Enable cache
-	 */
+
 	M2S_SYSREG->cc_cr = 1 << 0;
 }
 #endif
 
-/*
- * SoC configuration code that cannot be put into drivers
- */
-#if defined(CONFIG_ARCH_MISC_INIT)
-int arch_misc_init(void)
+
+int arch_cpu_init(void)
 {
-
-#ifdef CONFIG_M2S_CACHE_ON
-
 	/*
 	 * Enable the on-chip cache
 	 */
+#ifdef CONFIG_M2S_CACHE_ON
 	soc_cache_enable();
 #endif
 
@@ -65,11 +58,15 @@ int arch_misc_init(void)
 	struct mpu_region_config cfg = {
 		.start_addr = 0x00000000,
 		.region_no = REGION_0,
-		.xn = XN_EN,
+		.xn = XN_DIS,
 		.ap = PRIV_RW_USR_RW,
-		.mr_attr = STRONG_ORDER,
+		.mr_attr = O_I_WB_RD_WR_ALLOC,
 		.reg_size = REGION_4GB
 	};
+
+	disable_mpu();
 	mpu_config(&cfg);
+	enable_mpu();
+
+	return 0;
 }
-#endif /* CONFIG_ARCH_MISC_INIT */

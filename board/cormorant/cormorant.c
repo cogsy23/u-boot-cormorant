@@ -16,24 +16,32 @@ int board_init(void)
 
 int board_early_init_f(void)
 {
-	#ifdef CONFIG_SYS_NS16550
-
 	/*
 	 * Reset UART0/1 and take them out of reset
 	 * TODO: probably do this with pin_ctrl instead
 	 */
+	#ifdef CONFIG_SYS_NS16550
 	M2S_SYSREG->soft_reset_cr |= (1 << 7);
 	M2S_SYSREG->soft_reset_cr &= ~(1 << 7);
 	M2S_SYSREG->soft_reset_cr |= (1 << 8);
 	M2S_SYSREG->soft_reset_cr &= ~(1 << 8);
-
 	#endif
+
+	/*
+	 * clock_init()
+	 */
+	M2S_SYSREG->mssddr_pll_status_high_cr &= ~(1<<2);
+	while (!(M2S_SYSREG->mssddr_pll_status & (1<<0)));
+	M2S_SYSREG->mssddr_pll_status_high_cr &= ~(1<<0);
+	while (!(M2S_SYSREG->mssddr_pll_status & (1<<1)));
+	M2S_SYSREG->mssddr_facc1_cr &= ~(1<<12);
+	return 0;
 }
 
 static uint32_t volatile * const GPIO_CFG = (uint32_t *)0x40013000;
 static uint32_t volatile * const GPIO_OUT = (uint32_t *)0x40013088;
 
-void gpio_set(gpio, val)
+void gpio_set(int gpio, int val)
 {
 	*GPIO_OUT = (*GPIO_OUT & ~(1 << gpio)) | (val << gpio);
 }
