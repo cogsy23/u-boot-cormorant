@@ -2,6 +2,33 @@
 
 #include "armv7-m.dtsi"
 
+//m2s.dtsi
+/ {
+	soc {
+		//TODO There's actually two seperate buses
+		uart0: mmuart@40000000 {
+			compatible = "ns16550";
+			reg = <0x40000000 0x1000>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
+			interrupts = <10>;
+			fifo-size = <16>;
+			status = "disabled";
+			//TODO proper CCF and interrupt labels
+		};
+
+		uart1: mmuart@40010000 {
+			compatible = "ns16550";
+			reg = <0x40010000 0x1000>;
+			reg-shift = <2>;
+			reg-io-width = <4>;
+			interrupts = <11>;
+			fifo-size = <16>;
+			status = "disabled";
+		};
+	};
+};
+
 / {
 	model = "Cormorant Autopilot";
 	compatible = "cormorant", "m2s";
@@ -11,7 +38,12 @@
 		stdout-path = "serial0:115200n8";
 	};
 
-	//aliases {
-	//	serial0 = &usart1;
-	//};
+	aliases {
+		serial0 = &uart0;
+	};
+};
+
+&uart0 {
+	status = "enabled";
+	clock-frequency = <142000000>;
 };

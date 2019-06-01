@@ -44,7 +44,6 @@ static void soc_cache_enable(void)
 #if defined(CONFIG_ARCH_MISC_INIT)
 int arch_misc_init(void)
 {
-	yellow_led_on();
 
 #ifdef CONFIG_M2S_CACHE_ON
 
@@ -54,20 +53,6 @@ int arch_misc_init(void)
 	soc_cache_enable();
 #endif
 
-#ifdef CONFIG_SYS_NS16550
-
-	/*
-	 * Reset UART0/1 and take them out of reset
-	 */
-#ifdef CONFIG_SYS_NS16550_COM1
-	M2S_SYSREG->soft_reset_cr |= (1 << 7);
-	M2S_SYSREG->soft_reset_cr &= ~(1 << 7);
-#endif
-#ifdef CONFIG_SYS_NS16550_COM2
-	M2S_SYSREG->soft_reset_cr |= (1 << 8);
-	M2S_SYSREG->soft_reset_cr &= ~(1 << 8);
-#endif
-#endif
 	/*
 	 * Configure the memory protection unit (MPU) to allow full access to
 	 * the whole 4GB address space.

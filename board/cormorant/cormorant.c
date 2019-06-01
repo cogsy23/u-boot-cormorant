@@ -5,6 +5,7 @@
  */
 
 #include <common.h>
+#include <m2s.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -16,6 +17,22 @@ int dram_init(void)
 int board_init(void)
 {
 	return 0;
+}
+
+int board_early_init_f(void)
+{
+	#ifdef CONFIG_SYS_NS16550
+
+	/*
+	 * Reset UART0/1 and take them out of reset
+	 * TODO: probably do this with pin_ctrl instead
+	 */
+	M2S_SYSREG->soft_reset_cr |= (1 << 7);
+	M2S_SYSREG->soft_reset_cr &= ~(1 << 7);
+	M2S_SYSREG->soft_reset_cr |= (1 << 8);
+	M2S_SYSREG->soft_reset_cr &= ~(1 << 8);
+
+	#endif
 }
 
 static uint32_t volatile * const GPIO_CFG = (uint32_t *)0x40013000;
