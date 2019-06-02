@@ -27,6 +27,7 @@
 #include <common.h>
 #include <m2s.h>
 #include <ddr.h>
+#include <linux/sizes.h>
 
 /*
  * Generate DDR timings depending on the following DDR clock
@@ -53,7 +54,7 @@
 #define M2S_CLK1024_MAX(ns)	(M2S_CLK_VAL(ns,1024000))
 
 /*
- * MT46H32M16LFBF-6 params & timings
+ * AS4C32M16D2A-25 params & timings
  */
 #define DDR_BL			8	/* Burst length (value)		*/
 #define DDR_MR_BL		3	/* Burst length (power of 2)	*/
@@ -62,20 +63,20 @@
 #define DDR_CL			3	/* CAS (read) latency		*/
 #define DDR_WL			1	/* Write latency		*/
 #define DDR_tMRD		2
-#define DDR_tWTR		2
-#define DDR_tXP			1
-#define DDR_tCKE		1
+#define DDR_tWTR		M2S_CLK_MIN(8)
+#define DDR_tXP			2
+#define DDR_tCKE		3
 
-#define DDR_tRFC		M2S_CLK_MIN(72)
+#define DDR_tRFC		M2S_CLK_MIN(105)
 #define DDR_tREFI		M2S_CLK32_MAX(7800)
 #define DDR_tCKE_pre		M2S_CLK1024_MIN(200000)
 #define DDR_tCKE_post		M2S_CLK1024_MIN(400)
-#define DDR_tRCD		M2S_CLK_MIN(18)
-#define DDR_tRRD		M2S_CLK_MIN(12)
-#define DDR_tRP			M2S_CLK_MIN(18)
-#define DDR_tRC			M2S_CLK_MIN(60)
+#define DDR_tRCD		M2S_CLK_MIN(13)
+#define DDR_tRRD		M2S_CLK_MIN(10)
+#define DDR_tRP			M2S_CLK_MIN(13)
+#define DDR_tRC			M2S_CLK_MIN(58)
 #define DDR_tRAS_max		M2S_CLK1024_MAX(70000)
-#define DDR_tRAS_min		M2S_CLK_MIN(42)
+#define DDR_tRAS_min		M2S_CLK_MIN(45)
 #define DDR_tWR			M2S_CLK_MIN(15)
 
 /*
@@ -224,6 +225,10 @@ int dram_init (void)
 	ddr->phy.DYN_RESET_CR			= 0x0001;
 
 	ddr->ddrc.DYN_SOFT_RESET_CR		= 0x0001;
+
+	gd->ram_base = CONFIG_SYS_SDRAM_BASE;
+	// gd->ram_size = get_ram_size((void *)CONFIG_SYS_SDRAM_BASE, SZ_1G);
+	gd->ram_size = SZ_64M;
 #endif
 	return 0;
 }
