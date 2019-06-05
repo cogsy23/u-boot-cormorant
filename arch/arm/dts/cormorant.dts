@@ -49,5 +49,5 @@
 
 &uart0 {
 	status = "enabled";
-	clock-frequency = <142000000>;
+	clock-frequency = <100000000>;
 };
