@@ -659,7 +659,7 @@ include scripts/Makefile.extrawarn
 # Add user supplied CPPFLAGS, AFLAGS and CFLAGS as the last assignments
 KBUILD_CPPFLAGS += $(KCPPFLAGS)
 KBUILD_AFLAGS += $(KAFLAGS)
-KBUILD_CFLAGS += $(KCFLAGS)
+KBUILD_CFLAGS += $(KCFLAGS) -Werror
 
 # Use UBOOTINCLUDE when you must reference the include/ directory.
 # Needed to be compatible with the O= option
@@ -1559,14 +1559,7 @@ PHONY += prepare archprepare prepare0 prepare1 prepare2 prepare3
 # and if so do:
 # 1) Check that make has not been executed in the kernel src $(srctree)
 prepare3: include/config/uboot.release
-ifneq ($(KBUILD_SRC),)
-	@$(kecho) '  Using $(srctree) as source for U-Boot'
-	$(Q)if [ -f $(srctree)/.config -o -d $(srctree)/include/config ]; then \
-		echo >&2 "  $(srctree) is not clean, please run 'make mrproper'"; \
-		echo >&2 "  in the '$(srctree)' directory.";\
-		/bin/false; \
-	fi;
-endif
+
 
 # prepare2 creates a makefile if using a separate output directory
 prepare2: prepare3 outputmakefile cfg
